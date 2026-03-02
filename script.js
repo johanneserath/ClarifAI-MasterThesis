@@ -1,6 +1,4 @@
-/**
- * CONFIGURABLE CONSTANTS
- */
+
 const STATIC_ANSWER_TEXT = "This text will be shown to everyone that asks any question in the chat window";
 const PDF_BASE_URL = "MT0_ErathJohannes_2_Pager.pdf";
 
@@ -20,17 +18,32 @@ const sendBtn = document.getElementById('send-button');
 const emptyState = document.getElementById('empty-state');
 const sessionDisplay = document.getElementById('session-display');
 
-/**
- * UTILITY: TRACK EVENT
- */
-function trackEvent(eventType, metadata = {}) {
+const SUPABASE_URL = 'https://rwmftrnegxtdxgprrxgo.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3bWZ0cm5lZ3h0ZHhncHJyeGdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0NTk3MDAsImV4cCI6MjA4ODAzNTcwMH0.gXwofWxiU4GWSm6WOqk8C_jiWjIOT_Ym7y40fgTXEww';
+
+const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+async function trackEvent(eventType, metadata = {}) {
     const event = {
-        eventType,
-        sessionId,
-        timestamp: new Date().toISOString(),
-        ...metadata,
+        session_id: sessionId,
+        event_type: eventType,
+        metadata: metadata,
+        // created_at is handled by Supabase default now()
     };
-    console.log("Tracked event:", event);
+
+    console.log("Tracking event:", event);
+
+    if (supabaseClient) {
+        const { error } = await supabaseClient
+            .from('interaction_logs')
+            .insert([event]);
+
+        if (error) {
+            console.error("Supabase error:", error);
+        }
+    } else {
+        console.warn("Supabase client not found. Event only logged to console.");
+    }
 }
 
 /**
