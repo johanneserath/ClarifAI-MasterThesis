@@ -1,6 +1,7 @@
-/**
- * CONFIGURABLE CONSTANTS
- */
+
+// Track start time for time_on_page calculation
+const pageStartTime = Date.now();
+
 const STATIC_ANSWER_TEXT = "This text will be shown to everyone that asks any question in the chat window";
 const PDF_BASE_URL = "MT0_ErathJohannes_2_Pager.pdf";
 
@@ -20,17 +21,38 @@ const sendBtn = document.getElementById('send-button');
 const emptyState = document.getElementById('empty-state');
 const sessionDisplay = document.getElementById('session-display');
 
+const SUPABASE_URL = 'https://rwmftrnegxtdxgprrxgo.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3bWZ0cm5lZ3h0ZHhncHJyeGdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0NTk3MDAsImV4cCI6MjA4ODAzNTcwMH0.gXwofWxiU4GWSm6WOqk8C_jiWjIOT_Ym7y40fgTXEww';
+
+const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
 /**
  * UTILITY: TRACK EVENT
  */
-function trackEvent(eventType, metadata = {}) {
+async function trackEvent(eventType, elementId = null) {
+    const timeOnPage = ((Date.now() - pageStartTime) / 1000); // Time in seconds
+
     const event = {
-        eventType,
-        sessionId,
-        timestamp: new Date().toISOString(),
-        ...metadata,
+        participant_id: sessionId,
+        interface_type: isInterfaceB ? "Interface B" : "Interface A",
+        event_type: eventType,
+        element_id: elementId,
+        time_on_page: timeOnPage
     };
-    console.log("Tracked event:", event);
+
+    console.log("Tracking event:", event);
+
+    if (supabaseClient) {
+        const { error } = await supabaseClient
+            .from('interaction_logs')
+            .insert([event]);
+
+        if (error) {
+            console.error("Supabase error:", error);
+        }
+    } else {
+        console.warn("Supabase client not found. Event only logged to console.");
+    }
 }
 
 /**
@@ -52,6 +74,9 @@ function init() {
     if (isInterfaceB && pdfFrame) {
         pdfFrame.src = INITIAL_PDF_URL;
     }
+
+    // Track page load
+    trackEvent('page_load', 'window');
 }
 
 /**
@@ -80,11 +105,7 @@ function appendMessage(type, text) {
         msgDiv.innerHTML = `${text} <a href="${INITIAL_PDF_URL}" class="citation-link" target="_blank" rel="noopener noreferrer">[1]</a>`;
         const citation = msgDiv.querySelector('.citation-link');
         citation.addEventListener('click', (e) => {
-            // If Interface B, we might want to prevent default and just shift the iframe
-            // But usually, citations in AI chat are links. 
-            // For Interface A: standard behavior (opens in new tab)
-            // For Interface B: we'll track the click, and handle iframe update in handleSend
-            trackEvent('citation_click', { pdfUrl: INITIAL_PDF_URL });
+            trackEvent('citation_click', 'citation-link', { pdfUrl: INITIAL_PDF_URL });
         });
     } else {
         msgDiv.textContent = text;
@@ -134,19 +155,19 @@ function handleSend() {
  */
 if (sendBtn) {
     sendBtn.addEventListener('click', () => {
-        trackEvent('ask_button_click');
+        trackEvent('ask_button_click', 'send-button');
         handleSend();
     });
 }
 
 if (userInput) {
     userInput.addEventListener('click', () => {
-        trackEvent('input_click');
+        trackEvent('input_click', 'user-input');
     });
 
     userInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
-            trackEvent('enter_pressed');
+            trackEvent('enter_pressed', 'user-input');
             handleSend();
         }
     });
