@@ -30,11 +30,11 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
  * UTILITY: TRACK EVENT
  */
 async function trackEvent(eventType, elementId = null) {
-    const timeOnPage = ((Date.now() - pageStartTime) / 1000); // Time in seconds
+    const timeOnPage = ((Date.now() - pageStartTime) / 1000);
 
     const event = {
         participant_id: sessionId,
-        interface_type: isInterfaceB ? "Interface B" : "Interface A",
+        interface_type: isInterfaceB ? "B" : "A",
         event_type: eventType,
         element_id: elementId,
         time_on_page: timeOnPage
@@ -62,7 +62,7 @@ function init() {
     // 1. Session ID Logic
     let sid = sessionStorage.getItem('app_session_id');
     if (!sid) {
-        sid = 'local-' + Math.random().toString(36).substr(2, 9) + '-' + Date.now();
+        sid = 'user-' + Math.random().toString(36).substr(2, 9) + '-' + Date.now();
         sessionStorage.setItem('app_session_id', sid);
     }
     sessionId = sid;
