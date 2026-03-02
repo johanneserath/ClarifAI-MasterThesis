@@ -1,4 +1,7 @@
 
+// Track start time for time_on_page calculation
+const pageStartTime = Date.now();
+
 const STATIC_ANSWER_TEXT = "This text will be shown to everyone that asks any question in the chat window";
 const PDF_BASE_URL = "MT0_ErathJohannes_2_Pager.pdf";
 
@@ -23,12 +26,18 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
-async function trackEvent(eventType, metadata = {}) {
+/**
+ * UTILITY: TRACK EVENT
+ */
+async function trackEvent(eventType, elementId = null) {
+    const timeOnPage = ((Date.now() - pageStartTime) / 1000); // Time in seconds
+
     const event = {
-        session_id: sessionId,
+        participant_id: sessionId,
+        interface_type: isInterfaceB ? "Interface B" : "Interface A",
         event_type: eventType,
-        metadata: metadata,
-        // created_at is handled by Supabase default now()
+        element_id: elementId,
+        time_on_page: timeOnPage
     };
 
     console.log("Tracking event:", event);
@@ -65,6 +74,9 @@ function init() {
     if (isInterfaceB && pdfFrame) {
         pdfFrame.src = INITIAL_PDF_URL;
     }
+
+    // Track page load
+    trackEvent('page_load', 'window');
 }
 
 /**
@@ -93,11 +105,7 @@ function appendMessage(type, text) {
         msgDiv.innerHTML = `${text} <a href="${INITIAL_PDF_URL}" class="citation-link" target="_blank" rel="noopener noreferrer">[1]</a>`;
         const citation = msgDiv.querySelector('.citation-link');
         citation.addEventListener('click', (e) => {
-            // If Interface B, we might want to prevent default and just shift the iframe
-            // But usually, citations in AI chat are links. 
-            // For Interface A: standard behavior (opens in new tab)
-            // For Interface B: we'll track the click, and handle iframe update in handleSend
-            trackEvent('citation_click', { pdfUrl: INITIAL_PDF_URL });
+            trackEvent('citation_click', 'citation-link', { pdfUrl: INITIAL_PDF_URL });
         });
     } else {
         msgDiv.textContent = text;
@@ -147,19 +155,19 @@ function handleSend() {
  */
 if (sendBtn) {
     sendBtn.addEventListener('click', () => {
-        trackEvent('ask_button_click');
+        trackEvent('ask_button_click', 'send-button');
         handleSend();
     });
 }
 
 if (userInput) {
     userInput.addEventListener('click', () => {
-        trackEvent('input_click');
+        trackEvent('input_click', 'user-input');
     });
 
     userInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
-            trackEvent('enter_pressed');
+            trackEvent('enter_pressed', 'user-input');
             handleSend();
         }
     });
