@@ -2,7 +2,7 @@
  * CONFIGURABLE CONSTANTS
  */
 const STATIC_ANSWER_TEXT = "This text will be shown to everyone that asks any question in the chat window";
-const PDF_BASE_URL = "C:/temp/MT0_ErathJohannes_2_Pager.pdf";
+const PDF_BASE_URL = "MT0_ErathJohannes_2_Pager.pdf";
 
 // Detection for Interface B (contains a PDF frame)
 const pdfFrame = document.getElementById('pdf-frame');
