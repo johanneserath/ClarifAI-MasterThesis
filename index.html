@@ -8,46 +8,85 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 
-<body>
+<body class="landing-page">
 
-    <div id="app-container" class="layout-centered">
-        <header>
-            <div>
-                <h1>EDU BOT</h1>
-                <div id="session-display">Research Study Introduction</div>
+    <div class="landing-wrapper">
+        <header class="landing-header">
+            <div class="header-content">
+                <div class="logo">EDU<span>BOT</span></div>
             </div>
         </header>
 
-        <main>
-            <div class="welcome-content">
-                <h2>Welcome to the Study</h2>
-                <div class="study-description">
-                    <p>Thank you for participating in this research. This study evaluates the effectiveness of AI-driven
-                        educational assistants. Please review the following information about the study design and your
-                        participation.</p>
-                    <br>
-                    <p>The study involves interacting with a chatbot to solve specific educational tasks. Your
-                        interactions will be logged anonymously for research purposes.</p>
-                </div>
+        <main class="landing-main">
+            <section class="hero-section">
+                <h1>Welcome to the EDU BOT Research Study</h1>
+            </section>
 
-                <h2>Reference Document</h2>
-                <div class="pdf-preview-container">
-                    <iframe src="C:/temp/MT0_ErathJohannes_2_Pager.pdf" type="application/pdf">
-                        <p>It seems your browser does not support embedded PDFs. You can <a
-                                href="C:/temp/MT0_ErathJohannes_2_Pager.pdf">download the PDF here</a>.</p>
-                    </iframe>
-                </div>
+            <div class="content-grid">
+                <section class="landing-card info-card">
+                    <h2>About the Study</h2>
+                    <div class="card-body">
+                        <p>This research project, conducted by the Management, Communication & IT department at MCI
+                            | The Entrepreneurial School®, explores how students interact with Retrieval-Augmented
+                            Generation (RAG) systems. As AI tools become common in academic settings, understanding how
+                            to effectively query these systems—and how they present information from specific source
+                            texts—is crucial for modern digital literacy. This study specifically evaluates the quality
+                            of AI-generated responses based on user prompting behavior. Your interactions will help us
+                            understand the synergy between human inquiry and AI data retrieval.</p>
+                        <p>Your participation involves interacting with a chatbot prototype to solve educational tasks.
+                            All interactions are anonymized and stored securely for academic research.
+                        </p>
+                    </div>
+                </section>
 
-                <div class="confirmation-section">
-                    <input type="checkbox" id="read-understood">
-                    <label for="read-understood">I have read and understood the study information and the document
-                        provided.</label>
-                </div>
+                <section class="landing-card document-card">
+                    <h2>Study Instructions</h2>
+                    <div class="card-body">
+                        <p>Please follow these steps to complete the study session:</p>
+                        <ol class="instruction-list">
+                            <li><strong>Review the Reference Document:</strong> On the right, you will see a document
+                                titled "The Future of Remote Work: A Multi-Dimensional Analysis." You do not need to
+                                memorize it, but please familiarize yourself with its structure.</li>
+                            <li><strong>Interact with EDU BOT:</strong> Once you begin, you will be presented with a
+                                chatbot. Your goal is to use the chatbot to answer three specific questions regarding
+                                the document's findings.</li>
+                            <li><strong>Evaluate Accuracy:</strong> As part of our "Prompting Effectiveness" metric, you
+                                will be asked to briefly indicate if the AI successfully retrieved the correct
+                                information based on your queries and the provided source text.</li>
+                            <li><strong>Final Survey:</strong> After the third interaction, a short exit questionnaire
+                                will appear. Completion of this survey is required for your data to be included in the
+                                study.</li>
+                        </ol>
+                        <p class="important-note">
+                            <strong>Important Note:</strong> To ensure data integrity, please do not refresh your
+                            browser during the session. The entire process should take approximately 10–12 minutes.
+                        </p>
+                    </div>
+
+                </section>
+
+                <section class="landing-card action-card">
+                    <div class="confirmation-section">
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="read-understood">
+                            <label for="read-understood">
+                                <span class="custom-checkbox"></span>
+                                I have read and understood the study information and the provided document.
+                            </label>
+                        </div>
+                    </div>
+                    <button id="begin-button" class="cta-button" disabled>
+                        <span>Begin Study</span>
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </section>
             </div>
         </main>
 
-        <footer>
-            <button id="begin-button" class="begin-button" disabled>Begin!</button>
+        <footer class="landing-footer">
+            <p>&copy; 2026 Johannes Erath • Master's Thesis Project</p>
         </footer>
     </div>
 
@@ -63,7 +102,6 @@
             if (!beginBtn.disabled) {
                 const randomVal = Math.random();
                 const target = randomVal < 0.5 ? 'InterfaceA.html' : 'interfaceB.html';
-                console.log(`Random assignment: ${randomVal} -> ${target}`);
                 window.location.href = target;
             }
         });
