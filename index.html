@@ -100,16 +100,19 @@
 
         beginBtn.addEventListener('click', () => {
             if (!beginBtn.disabled) {
-                const randomVal = Math.random();
-                let target;
-                if (randomVal < 0.33) {
-                    target = 'InterfaceA.html';
-                } else if (randomVal < 0.66) {
-                    target = 'interfaceB.html';
-                } else {
-                    target = 'interfaceC.html';
-                }
-                window.location.href = target;
+                const groups = ['G1', 'G2', 'G3'];
+                const assignedGroup = groups[Math.floor(Math.random() * groups.length)];
+
+                sessionStorage.setItem('app_group', assignedGroup);
+                sessionStorage.setItem('app_step', '1');
+
+                const initialRoutes = {
+                    'G1': 'InterfaceA.html',
+                    'G2': 'interfaceB.html',
+                    'G3': 'interfaceC.html'
+                };
+
+                window.location.href = initialRoutes[assignedGroup];
             }
         });
     </script>

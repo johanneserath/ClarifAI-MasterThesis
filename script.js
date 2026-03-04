@@ -22,6 +22,9 @@ const INITIAL_PDF_URL = isInterfaceC
     : `${PDF_BASE_URL}#page=3&zoom=100`;
 
 let sessionId = "";
+let appGroup = sessionStorage.getItem('app_group') || "None";
+let appStep = parseInt(sessionStorage.getItem('app_step')) || 0;
+
 const chatWindow = document.getElementById('chat-window');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-button');
@@ -41,6 +44,8 @@ async function trackEvent(eventType, elementId = null) {
 
     const event = {
         participant_id: sessionId,
+        group_id: appGroup,
+        step_number: appStep,
         interface_type: INTERFACE_TYPE,
         event_type: eventType,
         element_id: elementId,
@@ -140,14 +145,19 @@ function handleSend() {
     // 2. Show the "Thinking" animation
     const indicator = showThinkingIndicator();
 
-    // 3. Wait 4.5 seconds
+    // 3. Dynamic Delay based on input length
+    // Base 2s + 20ms per character. Min 2.5s, Max 7s.
+    const dynamicDelay = Math.min(7000, Math.max(2500, 2000 + (text.length * 20)));
+    console.log(`Calculating delay for length ${text.length}: ${dynamicDelay}ms`);
+
+    // 4. Wait for the dynamic duration
     setTimeout(() => {
         if (indicator) indicator.remove();
 
         // Post the final answer
         appendMessage('ai', STATIC_ANSWER_TEXT);
 
-        // 4. Interface C Specific: Update PDF iframe with highlighting
+        // 5. Interface C Specific: Update PDF iframe with highlighting
         if (isInterfaceC && pdfFrame) {
             const highlightUrl = PDF_BASE_URL + "#:~:text=To%20mitigate%20the%20issue,trust%20in%20the%20AI%20answers.";
 
@@ -158,7 +168,38 @@ function handleSend() {
                 pdfFrame.src = highlightUrl;
             }, 100);
         }
-    }, 4500);
+    }, dynamicDelay);
+}
+
+/**
+ * NEXT TASK HANDLER
+ */
+function handleNextTask() {
+    const sequences = {
+        'G1': ['InterfaceA.html', 'interfaceB.html', 'interfaceC.html'],
+        'G2': ['interfaceB.html', 'interfaceC.html', 'InterfaceA.html'],
+        'G3': ['interfaceC.html', 'InterfaceA.html', 'interfaceB.html']
+    };
+
+    const currentSequence = sequences[appGroup];
+
+    if (appStep < 3) {
+        const nextStep = appStep + 1;
+        const nextInterface = currentSequence[nextStep - 1];
+
+        sessionStorage.setItem('app_step', nextStep.toString());
+        trackEvent('next_task_click', 'next-task-button');
+
+        // Short delay to ensure tracking event is sent
+        setTimeout(() => {
+            window.location.href = nextInterface;
+        }, 500);
+    } else {
+        alert("Study completed! Thank you for participating.");
+        trackEvent('study_completed', 'next-task-button');
+        // Optionally redirect to a final survey or index
+        // window.location.href = 'index.html';
+    }
 }
 
 /**
@@ -181,6 +222,13 @@ if (userInput) {
             trackEvent('enter_pressed', 'user-input');
             handleSend();
         }
+    });
+}
+
+const nextTaskBtn = document.getElementById('next-task-button');
+if (nextTaskBtn) {
+    nextTaskBtn.addEventListener('click', () => {
+        handleNextTask();
     });
 }
 
