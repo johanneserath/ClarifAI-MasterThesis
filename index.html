@@ -101,7 +101,14 @@
         beginBtn.addEventListener('click', () => {
             if (!beginBtn.disabled) {
                 const randomVal = Math.random();
-                const target = randomVal < 0.5 ? 'InterfaceA.html' : 'interfaceB.html';
+                let target;
+                if (randomVal < 0.33) {
+                    target = 'InterfaceA.html';
+                } else if (randomVal < 0.66) {
+                    target = 'interfaceB.html';
+                } else {
+                    target = 'interfaceC.html';
+                }
                 window.location.href = target;
             }
         });
