@@ -5,12 +5,19 @@ const pageStartTime = Date.now();
 const STATIC_ANSWER_TEXT = "This text will be shown to everyone that asks any question in the chat window";
 const PDF_BASE_URL = "MT0_ErathJohannes_2_Pager.pdf";
 
-// Detection for Interface B (contains a PDF frame)
+// Detection for Interfaces
+const isInterfaceA = window.location.pathname.toLowerCase().includes('interfacea.html');
+const isInterfaceB = window.location.pathname.toLowerCase().includes('interfaceb.html');
+const isInterfaceC = window.location.pathname.toLowerCase().includes('interfacec.html');
+
 const pdfFrame = document.getElementById('pdf-frame');
-const isInterfaceB = !!pdfFrame;
+const hasPdfFrame = !!pdfFrame;
+
+// Determine interface type letter for tracking
+const INTERFACE_TYPE = isInterfaceC ? "C" : (isInterfaceB ? "B" : "A");
 
 // Interface-specific PDF settings
-const INITIAL_PDF_URL = isInterfaceB
+const INITIAL_PDF_URL = isInterfaceC
     ? `${PDF_BASE_URL}#page=1&zoom=100`
     : `${PDF_BASE_URL}#page=3&zoom=100`;
 
@@ -34,7 +41,7 @@ async function trackEvent(eventType, elementId = null) {
 
     const event = {
         participant_id: sessionId,
-        interface_type: isInterfaceB ? "B" : "A",
+        interface_type: INTERFACE_TYPE,
         event_type: eventType,
         element_id: elementId,
         time_on_page: timeOnPage
@@ -70,8 +77,8 @@ function init() {
         sessionDisplay.innerText = `Session: ${sessionId}`;
     }
 
-    // 2. Interface B Specific Setup
-    if (isInterfaceB && pdfFrame) {
+    // 2. PDF Frame Setup (Interface B & C)
+    if (hasPdfFrame && pdfFrame) {
         pdfFrame.src = INITIAL_PDF_URL;
     }
 
@@ -102,11 +109,15 @@ function appendMessage(type, text) {
     msgDiv.className = `message ${type === 'user' ? 'user-message' : 'ai-message'}`;
 
     if (type === 'ai') {
-        msgDiv.innerHTML = `${text} <a href="${INITIAL_PDF_URL}" class="citation-link" target="_blank" rel="noopener noreferrer">[1]</a>`;
-        const citation = msgDiv.querySelector('.citation-link');
-        citation.addEventListener('click', (e) => {
-            trackEvent('citation_click', 'citation-link', { pdfUrl: INITIAL_PDF_URL });
-        });
+        if (isInterfaceB) {
+            msgDiv.textContent = text;
+        } else {
+            msgDiv.innerHTML = `${text} <a href="${INITIAL_PDF_URL}" class="citation-link" target="_blank" rel="noopener noreferrer">[1]</a>`;
+            const citation = msgDiv.querySelector('.citation-link');
+            citation.addEventListener('click', (e) => {
+                trackEvent('citation_click', 'citation-link', { pdfUrl: INITIAL_PDF_URL });
+            });
+        }
     } else {
         msgDiv.textContent = text;
     }
@@ -136,11 +147,11 @@ function handleSend() {
         // Post the final answer
         appendMessage('ai', STATIC_ANSWER_TEXT);
 
-        // 4. Interface B Specific: Update PDF iframe with highlighting
-        if (isInterfaceB && pdfFrame) {
+        // 4. Interface C Specific: Update PDF iframe with highlighting
+        if (isInterfaceC && pdfFrame) {
             const highlightUrl = PDF_BASE_URL + "#:~:text=To%20mitigate%20the%20issue,trust%20in%20the%20AI%20answers.";
 
-            console.log("Updating Interface B PDF frame...");
+            console.log("Updating Interface C PDF frame...");
             pdfFrame.src = "about:blank"; // Reset to ensure reload
 
             setTimeout(() => {
