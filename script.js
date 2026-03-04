@@ -5,6 +5,12 @@ const pageStartTime = Date.now();
 const STATIC_ANSWER_TEXT = "This text will be shown to everyone that asks any question in the chat window";
 const PDF_BASE_URL = "MT0_ErathJohannes_2_Pager.pdf";
 
+const TASKS = {
+    1: "Identify the primary economic benefits and challenges of remote work as discussed in the provided document. How do these factors impact overall productivity?",
+    2: "Explain the concept of 'Multi-Dimensional Analysis' in the context of remote work. What are the key dimensions the author focuses on?",
+    3: "Based on the document's findings, what are the recommended strategies for organizations to mitigate the negative social impacts of long-term remote work?"
+};
+
 // Detection for Interfaces
 const isInterfaceA = window.location.pathname.toLowerCase().includes('interfacea.html');
 const isInterfaceB = window.location.pathname.toLowerCase().includes('interfaceb.html');
@@ -34,7 +40,21 @@ const sessionDisplay = document.getElementById('session-display');
 const SUPABASE_URL = 'https://rwmftrnegxtdxgprrxgo.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3bWZ0cm5lZ3h0ZHhncHJyeGdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0NTk3MDAsImV4cCI6MjA4ODAzNTcwMH0.gXwofWxiU4GWSm6WOqk8C_jiWjIOT_Ym7y40fgTXEww';
 
-const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+// Initialize Supabase Client with explicit headers to prevent "missing apikey" errors
+const supabaseClient = (window.supabase && typeof window.supabase.createClient === 'function')
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        global: {
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+            }
+        }
+    })
+    : null;
+
+if (!supabaseClient) {
+    console.error("Supabase client failed to initialize. Check if the CDN script is loaded correctly.");
+}
 
 /**
  * UTILITY: TRACK EVENT
@@ -85,6 +105,18 @@ function init() {
     // 2. PDF Frame Setup (Interface B & C)
     if (hasPdfFrame && pdfFrame) {
         pdfFrame.src = INITIAL_PDF_URL;
+    }
+
+    // 3. Task Card Injection
+    const taskContainer = document.getElementById('task-description-container');
+    if (taskContainer && appStep > 0) {
+        const taskText = TASKS[appStep] || "Please follow the instructions provided for this session.";
+        taskContainer.innerHTML = `
+            <div class="task-card">
+                <span class="task-label">Task ${appStep} of 3</span>
+                <h3>${taskText}</h3>
+            </div>
+        `;
     }
 
     // Track page load
@@ -195,10 +227,10 @@ function handleNextTask() {
             window.location.href = nextInterface;
         }, 500);
     } else {
-        alert("Study completed! Thank you for participating.");
-        trackEvent('study_completed', 'next-task-button');
-        // Optionally redirect to a final survey or index
-        // window.location.href = 'index.html';
+        trackEvent('all_tasks_completed', 'next-task-button');
+        setTimeout(() => {
+            window.location.href = 'questionnaire.html';
+        }, 500);
     }
 }
 
