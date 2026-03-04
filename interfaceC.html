@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDU BOT</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <div id="app-container" class="layout-split">
+        <!-- LEFT PANEL: Chat Interface -->
+        <div id="left-pane-wrapper">
+            <section id="chat-panel">
+                <header>
+                    <div>
+                        <h1>EDU BOT</h1>
+                        <div id="session-display">Session: loading...</div>
+                    </div>
+                </header>
+
+                <main id="chat-window">
+                    <div class="empty-state" id="empty-state">
+                        <p>Type a question to begin.</p>
+                    </div>
+                </main>
+
+                <footer>
+                    <div class="input-group">
+                        <input type="text" id="user-input" placeholder="Type your question..." autocomplete="off">
+                        <button id="send-button">Ask</button>
+                    </div>
+                </footer>
+            </section>
+        </div>
+
+        <!-- RIGHT PANEL: PDF Viewer -->
+        <section id="pdf-panel">
+            <iframe id="pdf-frame" src="" title="PDF Viewer"></iframe>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
