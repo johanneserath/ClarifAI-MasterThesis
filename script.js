@@ -6,10 +6,27 @@ const STATIC_ANSWER_TEXT = "This text will be shown to everyone that asks any qu
 const PDF_BASE_URL = "MT0_ErathJohannes_2_Pager.pdf";
 
 const TASKS = {
-    1: "Identify the primary economic benefits and challenges of remote work as discussed in the provided document. How do these factors impact overall productivity?",
-    2: "Explain the concept of 'Multi-Dimensional Analysis' in the context of remote work. What are the key dimensions the author focuses on?",
-    3: "Based on the document's findings, what are the recommended strategies for organizations to mitigate the negative social impacts of long-term remote work?"
+    1: {
+        topic: "Economic Benefits of Remote Work",
+        description: "Identify the primary economic benefits and challenges of remote work as discussed in the provided document. How do these factors impact overall productivity?",
+        hint: "Use the chat to explore this topic based on the reference document."
+    },
+    2: {
+        topic: "Multi-Dimensional Analysis",
+        description: "Explain the concept of 'Multi-Dimensional Analysis' in the context of remote work. What are the key dimensions the author focuses on?",
+        hint: "Ask the chatbot to help you understand the key dimensions."
+    },
+    3: {
+        topic: "Mitigating Social Impacts",
+        description: "Based on the document's findings, what are the recommended strategies for organizations to mitigate the negative social impacts of long-term remote work?",
+        hint: "Use the chat to find specific recommendations from the document."
+    }
 };
+
+// Phase tracking for two-phase task card flow
+let currentPhase = 1;      // 1 or 2
+let promptSentInPhase = false;
+let optionSelectedInPhase = false;
 
 // Detection for Interfaces
 const isInterfaceA = window.location.pathname.toLowerCase().includes('interfacea.html');
@@ -107,20 +124,118 @@ function init() {
         pdfFrame.src = INITIAL_PDF_URL;
     }
 
-    // 3. Task Card Injection
-    const taskContainer = document.getElementById('task-description-container');
-    if (taskContainer && appStep > 0) {
-        const taskText = TASKS[appStep] || "Please follow the instructions provided for this session.";
-        taskContainer.innerHTML = `
-            <div class="task-card">
-                <span class="task-label">Task ${appStep} of 3</span>
-                <h3>${taskText}</h3>
-            </div>
-        `;
+    // 3. Task Card Injection (Two-Phase Flow)
+    if (appStep > 0) {
+        renderTaskCard(currentPhase);
+    }
+
+    // 4. Disable the main "Next Task" button until phase 2 is complete
+    const nextBtn = document.getElementById('next-task-button');
+    if (nextBtn) {
+        nextBtn.disabled = true;
     }
 
     // Track page load
     trackEvent('page_load', 'window');
+}
+
+/**
+ * RENDER TASK CARD (Two-Phase)
+ */
+function renderTaskCard(phase) {
+    const taskContainer = document.getElementById('task-description-container');
+    if (!taskContainer) return;
+
+    const task = TASKS[appStep];
+    if (!task) return;
+
+    taskContainer.innerHTML = `
+        <div class="task-card">
+            <span class="task-label">Task ${appStep} — Question ${phase}</span>
+            <h2 class="task-card-heading">${task.topic}</h2>
+            <p class="task-card-description">${task.description}</p>
+            <p class="task-card-hint">${task.hint}</p>
+
+            <div class="option-group">
+                <label class="option-box disabled">
+                    <input type="radio" name="accuracy-${phase}" value="accurate" disabled>
+                    <span class="option-label">I believe the AI answer is accurate</span>
+                </label>
+                <label class="option-box disabled">
+                    <input type="radio" name="accuracy-${phase}" value="inaccurate" disabled>
+                    <span class="option-label">I believe the AI answer is inaccurate</span>
+                </label>
+            </div>
+
+            <button class="card-next-button" id="card-next-btn" disabled>
+                ${phase === 1 ? 'Continue to Question 2' : 'Next Chatbot'}
+            </button>
+        </div>
+    `;
+
+    // Wire up option box listeners
+    const radios = taskContainer.querySelectorAll('input[type="radio"]');
+    radios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            optionSelectedInPhase = true;
+            trackEvent('option_selected', radio.value);
+            checkPhaseCompletion();
+        });
+    });
+
+    // Wire up the card next button
+    const cardNextBtn = document.getElementById('card-next-btn');
+    if (cardNextBtn) {
+        cardNextBtn.addEventListener('click', handleCardNext);
+    }
+}
+
+/**
+ * CHECK PHASE COMPLETION
+ * Enables the card "Next" button if both conditions are met.
+ */
+function checkPhaseCompletion() {
+    const cardNextBtn = document.getElementById('card-next-btn');
+    if (cardNextBtn && promptSentInPhase && optionSelectedInPhase) {
+        cardNextBtn.disabled = false;
+    }
+}
+
+/**
+ * HANDLE CARD NEXT BUTTON
+ */
+function handleCardNext() {
+    if (currentPhase === 1) {
+        // Move to phase 2: reset state and re-render card
+        currentPhase = 2;
+        promptSentInPhase = false;
+        optionSelectedInPhase = false;
+        trackEvent('card_next_click', 'phase_1_complete');
+
+        // Re-enable chat input for phase 2
+        const input = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+        if (input) {
+            input.disabled = false;
+            input.placeholder = 'Type your question...';
+        }
+        if (sendButton) sendButton.disabled = false;
+
+        renderTaskCard(2);
+    } else {
+        // Phase 2 complete: navigate to next interface
+        trackEvent('card_next_click', 'phase_2_complete');
+
+        // Disable the card button while navigating
+        const cardNextBtn = document.getElementById('card-next-btn');
+        if (cardNextBtn) {
+            cardNextBtn.disabled = true;
+            cardNextBtn.textContent = 'Navigating...';
+        }
+
+        // Use the same navigation logic as handleNextTask
+        handleNextTask();
+    }
 }
 
 /**
@@ -178,9 +293,17 @@ function handleSend() {
     // 2. Show the "Thinking" animation
     const indicator = showThinkingIndicator();
 
+    // 2.5 Mark that a prompt was sent in this phase
+    promptSentInPhase = true;
+
+    // Disable further input for this phase (one prompt per phase)
+    userInput.disabled = true;
+    userInput.placeholder = 'Prompt sent — please evaluate the answer above.';
+    if (sendBtn) sendBtn.disabled = true;
+
     // 3. Dynamic Delay based on input length
-    // Base 2s + 50ms per character. Min 2.5s, Max 10s.
-    const dynamicDelay = Math.min(10000, Math.max(2500, 2000 + (text.length * 50)));
+    // Base 2s + 35ms per character. Min 2.5s, Max 8,5s.
+    const dynamicDelay = Math.min(8500, Math.max(2500, 2000 + (text.length * 35)));
     console.log(`Calculating delay for length ${text.length}: ${dynamicDelay}ms`);
 
     // 4. Wait for the dynamic duration
@@ -189,6 +312,16 @@ function handleSend() {
 
         // Post the final answer
         appendMessage('ai', STATIC_ANSWER_TEXT);
+
+        // Enable option boxes now that the AI has answered
+        const taskContainer = document.getElementById('task-description-container');
+        if (taskContainer) {
+            const radios = taskContainer.querySelectorAll('input[type="radio"]');
+            radios.forEach(radio => radio.disabled = false);
+            const labels = taskContainer.querySelectorAll('.option-box');
+            labels.forEach(label => label.classList.remove('disabled'));
+        }
+        checkPhaseCompletion();
 
         // 5. Interface C Specific: Update PDF iframe with highlighting
         if (isInterfaceC && pdfFrame) {
