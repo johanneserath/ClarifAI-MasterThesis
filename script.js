@@ -9,17 +9,68 @@ const TASKS = {
     1: {
         topic: "Economic Benefits of Remote Work",
         description: "Identify the primary economic benefits and challenges of remote work as discussed in the provided document. How do these factors impact overall productivity?",
-        hint: "Use the chat to explore this topic based on the reference document."
+        phases: {
+            1: {
+                hint: "Ask the chatbot about the economic benefits based on the reference document.",
+                options: {
+                    accurate: "I believe the AI answer about benefits is accurate",
+                    inaccurate: "I believe the AI answer about benefits is inaccurate"
+                },
+                aiAnswer: "The document highlights reduced overhead costs, such as office space and utilities, as a primary economic benefit. This cost-saving measure allows organizations to invest in other areas or improve profit margins."
+            },
+            2: {
+                hint: "Now, ask the chatbot about the economic challenges mentioned in the document.",
+                options: {
+                    accurate: "I believe the AI answer about challenges is accurate",
+                    inaccurate: "I believe the AI answer about challenges is inaccurate"
+                },
+                aiAnswer: "A significant economic challenge mentioned is the initial cost of setting up home offices, including providing employees with necessary equipment and secure internet connections. Furthermore, there might be hidden costs related to cybersecurity measures required for a decentralized workforce."
+            }
+        }
     },
     2: {
         topic: "Multi-Dimensional Analysis",
         description: "Explain the concept of 'Multi-Dimensional Analysis' in the context of remote work. What are the key dimensions the author focuses on?",
-        hint: "Ask the chatbot to help you understand the key dimensions."
+        phases: {
+            1: {
+                hint: "Ask the chatbot to explain 'Multi-Dimensional Analysis'.",
+                options: {
+                    accurate: "I believe the AI explanation of the concept is accurate",
+                    inaccurate: "I believe the AI explanation of the concept is inaccurate"
+                },
+                aiAnswer: "In the context of remote work, 'Multi-Dimensional Analysis' refers to evaluating the shift not just from an economic standpoint, but also taking into account psychological, sociological, and environmental factors to get a holistic view of its impact."
+            },
+            2: {
+                hint: "Ask the chatbot to list the key dimensions focused on by the author.",
+                options: {
+                    accurate: "I believe the AI list of dimensions is accurate",
+                    inaccurate: "I believe the AI list of dimensions is inaccurate"
+                },
+                aiAnswer: "The author primarily focuses on three key dimensions: 1) Economic impact (cost savings vs. setup costs), 2) Psychological impact (employee well-being and burnout), and 3) Sociological impact (team cohesion and communication)."
+            }
+        }
     },
     3: {
         topic: "Mitigating Social Impacts",
         description: "Based on the document's findings, what are the recommended strategies for organizations to mitigate the negative social impacts of long-term remote work?",
-        hint: "Use the chat to find specific recommendations from the document."
+        phases: {
+            1: {
+                hint: "Use the chat to ask about the negative social impacts.",
+                options: {
+                    accurate: "I believe the AI answer identifying the impacts is accurate",
+                    inaccurate: "I believe the AI answer identifying the impacts is inaccurate"
+                },
+                aiAnswer: "The document notes that long-term remote work can lead to feelings of isolation among employees and a potential weakening of corporate culture due to the lack of spontaneous, informal interactions that typically occur in a physical office setting."
+            },
+            2: {
+                hint: "Now ask about strategies to mitigate these negative impacts.",
+                options: {
+                    accurate: "I believe the AI's mitigation strategies are accurate",
+                    inaccurate: "I believe the AI's mitigation strategies are inaccurate"
+                },
+                aiAnswer: "To mitigate these issues, the document recommends implementing structured virtual team-building activities, scheduling regular one-on-one video check-ins to monitor employee well-being, and, when feasible, organizing occasional in-person gatherings to strengthen team cohesion."
+            }
+        }
     }
 };
 
@@ -82,7 +133,7 @@ async function trackEvent(eventType, elementId = null) {
     const event = {
         participant_id: sessionId,
         group_id: appGroup,
-        step_number: appStep,
+        task_number: appStep,
         interface_type: INTERFACE_TYPE,
         event_type: eventType,
         element_id: elementId,
@@ -149,22 +200,34 @@ function renderTaskCard(phase) {
     const task = TASKS[appStep];
     if (!task) return;
 
+    const phaseData = task.phases[phase];
+    if (!phaseData) return;
+
     taskContainer.innerHTML = `
         <div class="task-card">
             <span class="task-label">Task ${appStep} — Question ${phase}</span>
             <h2 class="task-card-heading">${task.topic}</h2>
             <p class="task-card-description">${task.description}</p>
-            <p class="task-card-hint">${task.hint}</p>
+            <p class="task-card-hint">${phaseData.hint}</p>
 
             <div class="option-group">
                 <label class="option-box disabled">
                     <input type="radio" name="accuracy-${phase}" value="accurate" disabled>
-                    <span class="option-label">I believe the AI answer is accurate</span>
+                    <span class="option-label">${phaseData.options.accurate}</span>
                 </label>
                 <label class="option-box disabled">
                     <input type="radio" name="accuracy-${phase}" value="inaccurate" disabled>
-                    <span class="option-label">I believe the AI answer is inaccurate</span>
+                    <span class="option-label">${phaseData.options.inaccurate}</span>
                 </label>
+                <label class="option-box disabled">
+                    <input type="radio" name="accuracy-${phase}" value="cannot_answer" disabled>
+                    <span class="option-label">I can not answer this</span>
+                </label>
+            </div>
+
+            <div id="why-textbox-container" style="display: none; margin-bottom: 1rem;">
+                <label for="why-textarea" style="font-size: 0.85rem; color: var(--text-main); font-weight: 600;">Why? (Optional)</label>
+                <textarea id="why-textarea" placeholder="Please elaborate..." style="width: 100%; padding: 0.5rem; border: 2px solid var(--border-color); border-radius: 0.5rem; margin-top: 0.25rem; resize: vertical; min-height: 60px; font-family: inherit; font-size: 0.85rem;"></textarea>
             </div>
 
             <button class="card-next-button" id="card-next-btn" disabled>
@@ -178,6 +241,16 @@ function renderTaskCard(phase) {
     radios.forEach(radio => {
         radio.addEventListener('change', () => {
             optionSelectedInPhase = true;
+
+            const whyContainer = document.getElementById('why-textbox-container');
+            if (whyContainer) {
+                if (radio.value === 'cannot_answer') {
+                    whyContainer.style.display = 'block';
+                } else {
+                    whyContainer.style.display = 'none';
+                }
+            }
+
             trackEvent('option_selected', radio.value);
             checkPhaseCompletion();
         });
@@ -205,11 +278,23 @@ function checkPhaseCompletion() {
  * HANDLE CARD NEXT BUTTON
  */
 function handleCardNext() {
+    // Check if the user filled out the optional "why" textbox
+    const whyContainer = document.getElementById('why-textbox-container');
+    const whyTextarea = document.getElementById('why-textarea');
+    let whyReason = '';
+    if (whyContainer && whyContainer.style.display !== 'none' && whyTextarea) {
+        whyReason = whyTextarea.value.trim();
+    }
+
     if (currentPhase === 1) {
         // Move to phase 2: reset state and re-render card
         currentPhase = 2;
         promptSentInPhase = false;
         optionSelectedInPhase = false;
+
+        if (whyReason) {
+            trackEvent('cannot_answer_reason', whyReason);
+        }
         trackEvent('card_next_click', 'phase_1_complete');
 
         // Re-enable chat input for phase 2
@@ -223,7 +308,9 @@ function handleCardNext() {
 
         renderTaskCard(2);
     } else {
-        // Phase 2 complete: navigate to next interface
+        if (whyReason) {
+            trackEvent('cannot_answer_reason', whyReason);
+        }
         trackEvent('card_next_click', 'phase_2_complete');
 
         // Disable the card button while navigating
@@ -279,6 +366,56 @@ function appendMessage(type, text) {
 }
 
 /**
+ * STREAM MESSAGE (word-by-word like ChatGPT)
+ */
+function streamMessage(text, onComplete) {
+    if (emptyState) emptyState.style.display = 'none';
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'message ai-message';
+
+    // Create a span for the streaming text
+    const textSpan = document.createElement('span');
+    msgDiv.appendChild(textSpan);
+
+    chatWindow.appendChild(msgDiv);
+
+    const words = text.split(' ');
+    let wordIndex = 0;
+
+    function typeNextWord() {
+        if (wordIndex < words.length) {
+            textSpan.textContent += (wordIndex > 0 ? ' ' : '') + words[wordIndex];
+            wordIndex++;
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+
+            // Random delay between 30-80ms per word for natural feel
+            const delay = 30 + Math.random() * 50;
+            setTimeout(typeNextWord, delay);
+        } else {
+            // Streaming complete — add citation if not InterfaceB
+            if (!isInterfaceB) {
+                const citation = document.createElement('a');
+                citation.href = INITIAL_PDF_URL;
+                citation.className = 'citation-link';
+                citation.target = '_blank';
+                citation.rel = 'noopener noreferrer';
+                citation.textContent = ' [1]';
+                citation.addEventListener('click', () => {
+                    trackEvent('citation_click', 'citation-link');
+                });
+                msgDiv.appendChild(citation);
+            }
+
+            // Call the completion callback
+            if (onComplete) onComplete();
+        }
+    }
+
+    typeNextWord();
+}
+
+/**
  * ACTION HANDLER
  */
 function handleSend() {
@@ -310,18 +447,23 @@ function handleSend() {
     setTimeout(() => {
         if (indicator) indicator.remove();
 
-        // Post the final answer
-        appendMessage('ai', STATIC_ANSWER_TEXT);
+        // Retrieve the specific predefined AI answer for this task and phase
+        const aiAnswer = (TASKS[appStep] && TASKS[appStep].phases[currentPhase])
+            ? TASKS[appStep].phases[currentPhase].aiAnswer
+            : "I am unable to provide an answer at this time.";
 
-        // Enable option boxes now that the AI has answered
-        const taskContainer = document.getElementById('task-description-container');
-        if (taskContainer) {
-            const radios = taskContainer.querySelectorAll('input[type="radio"]');
-            radios.forEach(radio => radio.disabled = false);
-            const labels = taskContainer.querySelectorAll('.option-box');
-            labels.forEach(label => label.classList.remove('disabled'));
-        }
-        checkPhaseCompletion();
+        // Post the AI answer word-by-word (streaming effect)
+        streamMessage(aiAnswer, () => {
+            // Enable option boxes after streaming completes
+            const taskContainer = document.getElementById('task-description-container');
+            if (taskContainer) {
+                const radios = taskContainer.querySelectorAll('input[type="radio"]');
+                radios.forEach(radio => radio.disabled = false);
+                const labels = taskContainer.querySelectorAll('.option-box');
+                labels.forEach(label => label.classList.remove('disabled'));
+            }
+            checkPhaseCompletion();
+        });
 
         // 5. Interface C Specific: Update PDF iframe with highlighting
         if (isInterfaceC && pdfFrame) {
