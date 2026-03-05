@@ -10,31 +10,36 @@
 
 <body class="theme-b">
 
-    <div id="task-description-container"></div>
-
     <div id="app-container" class="layout-centered">
-        <header>
-            <div>
-                <h1>ClarifAI</h1>
-                <div id="session-display">Session: loading...</div>
-            </div>
-        </header>
+        <!-- New: Task Card on the Left -->
+        <div id="task-description-container"></div>
 
-        <main id="chat-window">
-            <div class="empty-state" id="empty-state">
-                <p>Type a question to begin.</p>
-            </div>
-        </main>
+        <!-- New: Chat Interface on the Right -->
+        <div id="chat-wrapper">
+            <header>
+                <div>
+                    <h1>ClarifAI</h1>
+                    <div id="session-display">Session: loading...</div>
+                </div>
+            </header>
 
-        <footer>
-            <div class="input-group">
-                <input type="text" id="user-input" placeholder="Type your question..." autocomplete="off">
-                <button id="send-button">Ask</button>
-            </div>
-            <div class="navigation-group">
-                <button id="next-task-button" class="secondary-button">Next</button>
-            </div>
-        </footer>
+            <main id="chat-window">
+                <div class="empty-state" id="empty-state">
+                    <p>Type a question to begin.</p>
+                </div>
+            </main>
+
+            <footer>
+                <div class="input-group">
+                    <textarea id="user-input" placeholder="Type your question..." rows="1"
+                        autocomplete="off"></textarea>
+                    <button id="send-button">Ask</button>
+                </div>
+                <div class="navigation-group">
+                    <button id="next-task-button" class="secondary-button">Next</button>
+                </div>
+            </footer>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
