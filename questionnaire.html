@@ -204,12 +204,12 @@
                     <div class="form-group full-width">
                         <label>Gender</label>
                         <div class="radio-grid">
-                            <label class="radio-option"><input type="radio" name="gender" value="1" required>
+                            <label class="radio-option"><input type="radio" name="gender" value="m" required>
                                 Male</label>
-                            <label class="radio-option"><input type="radio" name="gender" value="2"> Female</label>
-                            <label class="radio-option"><input type="radio" name="gender" value="3">
+                            <label class="radio-option"><input type="radio" name="gender" value="f"> Female</label>
+                            <label class="radio-option"><input type="radio" name="gender" value="d">
                                 Diverse</label>
-                            <label class="radio-option"><input type="radio" name="gender" value="4"> Prefer not
+                            <label class="radio-option"><input type="radio" name="gender" value="n"> Prefer not
                                 to say</label>
                         </div>
                     </div>
@@ -277,7 +277,7 @@
                 const dbData = {
                     user_id: sessionUserId,
                     age: parseInt(rawData.age),
-                    gender: parseInt(rawData.gender),
+                    gender: rawData.gender,
                     ai_frequency: parseInt(rawData.ai_frequency),
                     comment: rawData.comment || ""
                 };
@@ -304,10 +304,6 @@
                 }
 
                 if (success) {
-                    // Also track a general event
-                    if (typeof trackEvent === 'function') {
-                        trackEvent('questionnaire_completed', sessionUserId);
-                    }
                     formWrapper.style.display = 'none';
                     thankYouMessage.style.display = 'block';
                 }

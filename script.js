@@ -83,12 +83,13 @@ let optionSelectedInPhase = false;
 const isInterfaceA = window.location.pathname.toLowerCase().includes('interfacea.html');
 const isInterfaceB = window.location.pathname.toLowerCase().includes('interfaceb.html');
 const isInterfaceC = window.location.pathname.toLowerCase().includes('interfacec.html');
+const isQuestionnaire = window.location.pathname.toLowerCase().includes('questionnaire.html');
 
 const pdfFrame = document.getElementById('pdf-frame');
 const hasPdfFrame = !!pdfFrame;
 
-// Determine interface type letter for tracking
-const INTERFACE_TYPE = isInterfaceC ? "C" : (isInterfaceB ? "B" : "A");
+// Determine interface type letter for tracking (Q for Questionnaire)
+const INTERFACE_TYPE = isQuestionnaire ? "Q" : (isInterfaceC ? "C" : (isInterfaceB ? "B" : "A"));
 
 // Interface-specific PDF settings
 const INITIAL_PDF_URL = isInterfaceC
@@ -131,9 +132,10 @@ async function trackEvent(eventType, elementId = null) {
     const timeOnPage = ((Date.now() - pageStartTime) / 1000);
 
     const event = {
-        participant_id: sessionId,
+        user_id: sessionId,
         group_id: appGroup,
-        task_number: appStep,
+        task_number: isQuestionnaire ? 0 : appStep,
+        phase_number: isQuestionnaire ? 0 : currentPhase,
         interface_type: INTERFACE_TYPE,
         event_type: eventType,
         element_id: elementId,
@@ -152,6 +154,33 @@ async function trackEvent(eventType, elementId = null) {
         }
     } else {
         console.warn("Supabase client not found. Event only logged to console.");
+    }
+}
+
+/**
+ * UTILITY: LOG CHAT PROMPT
+ * Logs the specific prompt text to the chatPrompts_log table.
+ */
+async function logChatPrompt(promptText) {
+    if (!supabaseClient) return;
+
+    const data = {
+        user_id: sessionId,
+        prompt_text: promptText,
+        interface_type: INTERFACE_TYPE,
+        task_number: appStep,
+        phase_number: currentPhase, // Tracks Question 1 or 2
+        group_id: appGroup          // Tracks study group
+    };
+
+    console.log("Logging chat prompt:", data);
+
+    const { error } = await supabaseClient
+        .from('chatPrompts_log')
+        .insert([data]);
+
+    if (error) {
+        console.error("Supabase Error (chatPrompts_log):", error);
     }
 }
 
@@ -186,8 +215,10 @@ function init() {
         nextBtn.disabled = true;
     }
 
-    // Track page load
-    trackEvent('page_load', 'window');
+    // Track page load (only for interface tasks, not questionnaire)
+    if (!isQuestionnaire) {
+        trackEvent('page_load', 'window');
+    }
 }
 
 /**
@@ -421,6 +452,9 @@ function streamMessage(text, onComplete) {
 function handleSend() {
     const text = userInput.value.trim();
     if (!text) return;
+
+    // Log the prompt text for qualitative analysis
+    logChatPrompt(text);
 
     // 1. Post User Message
     appendMessage('user', text);
