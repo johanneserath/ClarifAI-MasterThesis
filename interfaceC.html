@@ -10,37 +10,38 @@
 
 <body class="theme-c">
 
-    <div id="app-container" class="layout-split">
-        <!-- LEFT PANEL: Chat Interface -->
-        <div id="left-pane-wrapper">
-            <div id="task-description-container"></div>
-            <section id="chat-panel">
-                <header>
-                    <div>
-                        <h1>ClarifAI</h1>
-                        <div id="session-display">Session: loading...</div>
-                    </div>
-                </header>
+    <div id="app-container" class="layout-triple">
+        <!-- New: Column 1: Task Card -->
+        <div id="task-description-container"></div>
 
-                <main id="chat-window">
-                    <div class="empty-state" id="empty-state">
-                        <p>Type a question to begin.</p>
-                    </div>
-                </main>
+        <!-- New: Column 2: Chat Interface -->
+        <div id="chat-wrapper">
+            <header>
+                <div>
+                    <h1>ClarifAI</h1>
+                    <div id="session-display">Session: loading...</div>
+                </div>
+            </header>
 
-                <footer>
-                    <div class="input-group">
-                        <input type="text" id="user-input" placeholder="Type your question..." autocomplete="off">
-                        <button id="send-button">Ask</button>
-                    </div>
-                    <div class="navigation-group">
-                        <button id="next-task-button" class="secondary-button">Next</button>
-                    </div>
-                </footer>
-            </section>
+            <main id="chat-window">
+                <div class="empty-state" id="empty-state">
+                    <p>Type a question to begin.</p>
+                </div>
+            </main>
+
+            <footer>
+                <div class="input-group">
+                    <textarea id="user-input" placeholder="Type your question..." rows="1"
+                        autocomplete="off"></textarea>
+                    <button id="send-button">Ask</button>
+                </div>
+                <div class="navigation-group">
+                    <button id="next-task-button" class="secondary-button">Next</button>
+                </div>
+            </footer>
         </div>
 
-        <!-- RIGHT PANEL: PDF Viewer -->
+        <!-- New: Column 3: PDF Viewer -->
         <section id="pdf-panel">
             <iframe id="pdf-frame" src="" title="PDF Viewer"></iframe>
         </section>

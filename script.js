@@ -173,13 +173,14 @@ function handleSend() {
     // 1. Post User Message
     appendMessage('user', text);
     userInput.value = '';
+    userInput.style.height = 'auto'; // Reset height after send
 
     // 2. Show the "Thinking" animation
     const indicator = showThinkingIndicator();
 
     // 3. Dynamic Delay based on input length
-    // Base 2s + 20ms per character. Min 2.5s, Max 7s.
-    const dynamicDelay = Math.min(7000, Math.max(2500, 2000 + (text.length * 20)));
+    // Base 2s + 50ms per character. Min 2.5s, Max 10s.
+    const dynamicDelay = Math.min(10000, Math.max(2500, 2000 + (text.length * 50)));
     console.log(`Calculating delay for length ${text.length}: ${dynamicDelay}ms`);
 
     // 4. Wait for the dynamic duration
@@ -250,10 +251,17 @@ if (userInput) {
     });
 
     userInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
             trackEvent('enter_pressed', 'user-input');
             handleSend();
         }
+    });
+
+    // Auto-resize textarea as user types
+    userInput.addEventListener('input', () => {
+        userInput.style.height = 'auto';
+        userInput.style.height = userInput.scrollHeight + 'px';
     });
 }
 
