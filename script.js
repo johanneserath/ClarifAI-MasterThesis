@@ -7,68 +7,83 @@ const PDF_BASE_URL = "MT0_ErathJohannes_2_Pager.pdf";
 
 const TASKS = {
     1: {
-        topic: "Economic Benefits of Remote Work",
-        description: "Identify the primary economic benefits and challenges of remote work as discussed in the provided document. How do these factors impact overall productivity?",
+        docUrl: "doc2_hr-guideline.html",
+        topic: "HR & Corporate Benefits",
+        description: "Du bearbeitest zwei Tickets zum Thema Personalrichtlinien und Zusatzleistungen.",
         phases: {
             1: {
-                hint: "Ask the chatbot about the economic benefits based on the reference document.",
+                hint: "Aufgabe 1 prüfen:",
+                userTicket: "📩 Neues Ticket von: Lisa (Sales) <br><br>\"Hallo liebes Support-Team, ich bin seit diesem Monat in einem neuen Fitnessstudio angemeldet und würde gerne den Corporate-Benefit nutzen. Welchen Betrag darf ich bei der Spesenabrechnung für das Fitnessstudio maximal geltend machen?\"",
                 options: {
-                    accurate: "I believe the AI answer about benefits is accurate",
-                    inaccurate: "I believe the AI answer about benefits is inaccurate"
+                    accurate: "\"Du kannst monatlich bis zu 40 Euro für das Fitnessstudio abrechnen.\"",
+                    inaccurate: "\"Du kannst monatlich bis zu 50 Euro für das Fitnessstudio abrechnen.\""
                 },
-                aiAnswer: "The document highlights reduced overhead costs, such as office space and utilities, as a primary economic benefit. This cost-saving measure allows organizations to invest in other areas or improve profit margins."
+                aiAnswer: "Zertifizierte Fitnessstudios und Yoga-Zentren erhielten im vergangenen Jahr eine Erhöhung des monatlichen Gesundheitszuschusses auf 40 Euro (zuvor waren es 30 Euro). Der Betrag kann unter dem Code #Fit26 im Rahmen der regulären monatlichen Spesenabrechnung zurückgeholt werden.",
+                highlightUrl: "doc2_hr-guideline.html#:~:text=Der%20monatliche%20Gesundheitszuschuss,angehoben"
             },
             2: {
-                hint: "Now, ask the chatbot about the economic challenges mentioned in the document.",
+                hint: "Aufgabe 2 prüfen:",
+                userTicket: "📩 Neues Ticket von: Markus (Projektmanagement) <br><br>\"Hi, ich muss für ein abteilungsübergreifendes Projekt ein tägliches Status-Meeting aufsetzen, bei dem Anwesenheitspflicht herrscht. In welchem Zeitfenster liegt unsere offizielle Kernarbeitszeit, damit ich das Meeting sicher planen kann?\"",
                 options: {
-                    accurate: "I believe the AI answer about challenges is accurate",
-                    inaccurate: "I believe the AI answer about challenges is inaccurate"
+                    accurate: "\"Bitte plane das Meeting im Fenster zwischen 09:00 und 15:00 Uhr.\"",
+                    inaccurate: "\"Bitte plane das Meeting im Fenster zwischen 10:00 und 15:00 Uhr.\""
                 },
-                aiAnswer: "A significant economic challenge mentioned is the initial cost of setting up home offices, including providing employees with necessary equipment and secure internet connections. Furthermore, there might be hidden costs related to cybersecurity measures required for a decentralized workforce."
+                aiAnswer: "Der IT-Support und der Kundenservice arbeiten mit eigenen Schichtplänen. In allen anderen Abteilungen ist eine verbindliche Kernarbeitszeit von 09:00 bis 15:00 Uhr festgelegt. Während dieses Zeitraums wird erwartet, dass das Team für Meetings und Kundenanrufe jederzeit erreichbar ist. In den Zeiten dazwischen gibt es Gleitzeit.",
+                highlightUrl: "doc2_hr-guideline.html#:~:text=verbindliche%20Kernarbeitszeit%20von%2010"
             }
         }
     },
     2: {
-        topic: "Multi-Dimensional Analysis",
-        description: "Explain the concept of 'Multi-Dimensional Analysis' in the context of remote work. What are the key dimensions the author focuses on?",
+        docUrl: "doc1_it-security.html",
+        topic: "IT-Sicherheit & Hardware",
+        description: "Du bearbeitest zwei Tickets zum Thema IT-Sicherheitsprotokolle.",
         phases: {
             1: {
-                hint: "Ask the chatbot to explain 'Multi-Dimensional Analysis'.",
+                hint: "Aufgabe 3 prüfen:",
+                userTicket: "📩 Neues Ticket von: Sarah (Accounting) <br><br>\"Moin, ich habe heute mein System-Passwort neu gesetzt und möchte mir direkt einen Kalender-Reminder für den nächsten Wechsel einstellen. Nach wie vielen Tagen zwingt mich das System ohnehin zum Wechsel?\"",
                 options: {
-                    accurate: "I believe the AI explanation of the concept is accurate",
-                    inaccurate: "I believe the AI explanation of the concept is inaccurate"
+                    accurate: "\"Stell dir den Reminder auf 60 Tage ein.\"",
+                    inaccurate: "\"Stell dir den Reminder auf 90 Tage ein.\""
                 },
-                aiAnswer: "In the context of remote work, 'Multi-Dimensional Analysis' refers to evaluating the shift not just from an economic standpoint, but also taking into account psychological, sociological, and environmental factors to get a holistic view of its impact."
+                aiAnswer: "Um Accounts vor Brute-Force-Attacken zu schützen, müssen alle Passwörter im System unbedingt alle 60 Tage gewechselt werden. 5 Tage, 3 Tage und 24 Stunden vor Ablauf sendet das System automatisch eine E-Mail-Erinnerung. Das Verwenden der gleichen Passwörter für private Zwecke oder auf externen Plattformen ist absolut verboten und verstößt gegen die Compliance-Richtlinien.",
+                highlightUrl: "doc1_it-security.html#:~:text=zwingend%20alle%2090%20Tage%20erneuert"
             },
             2: {
-                hint: "Ask the chatbot to list the key dimensions focused on by the author.",
+                hint: "Aufgabe 4 prüfen:",
+                userTicket: "📩 Neues Ticket von: Thomas (Consulting) <br><br>\"Hilfe! Mein Firmen-Laptop wurde gerade im ICE gestohlen. Ich bin auf dem Weg zur Polizei, aber wie viel Zeit habe ich maximal, um den Verlust offiziell bei der IT zu melden, bevor es eine Abmahnung gibt?\"",
                 options: {
-                    accurate: "I believe the AI list of dimensions is accurate",
-                    inaccurate: "I believe the AI list of dimensions is inaccurate"
+                    accurate: "\"Du musst den Verlust zwingend innerhalb von 2 Stunden melden.\"",
+                    inaccurate: "\"Du musst den Verlust zwingend innerhalb von 5 Stunden melden.\""
                 },
-                aiAnswer: "The author primarily focuses on three key dimensions: 1) Economic impact (cost savings vs. setup costs), 2) Psychological impact (employee well-being and burnout), and 3) Sociological impact (team cohesion and communication)."
+                aiAnswer: "Bei Diebstahl, Liegenlassen oder physischem Verlust eines Firmen-Laptops, Tablets oder Diensthandys muss innerhalb von zwei Stunden nach Feststellung des Verlusts die IT-Hotline (+43 512 000-999) telefonisch benachrichtigt werden. Nur durch diese zügige Meldung kann eine umgehende Fernlöschung (Remote-Wipe) sämtlicher lokaler Daten eingeleitet und der Netzwerkzugang gesperrt werden. Eine E-Mail-Mitteilung ist bei Verlust von Hardware nicht ausreichend.",
+                highlightUrl: "doc1_it-security.html#:~:text=innerhalb%20von%202%20Stunden"
             }
         }
     },
     3: {
-        topic: "Mitigating Social Impacts",
-        description: "Based on the document's findings, what are the recommended strategies for organizations to mitigate the negative social impacts of long-term remote work?",
+        docUrl: "doc3_travel-policy.html",
+        topic: "Travel-Policy",
+        description: "Du bearbeitest zwei Tickets zum Thema Geschäftsreisen.",
         phases: {
             1: {
-                hint: "Use the chat to ask about the negative social impacts.",
+                hint: "Aufgabe 5 prüfen:",
+                userTicket: "📩 Neues Ticket von: Elena (Marketing) <br><br>\"Hallo Support, ich reise nächste Woche für eine Messe nach München (Deutschland). Das Tool zeigt mir viele verschiedene Hotels an. Was ist unsere absolute preisliche Obergrenze pro Nacht für Inlandsreisen?\"",
                 options: {
-                    accurate: "I believe the AI answer identifying the impacts is accurate",
-                    inaccurate: "I believe the AI answer identifying the impacts is inaccurate"
+                    accurate: "\"Du darfst ein Hotel für maximal 120 Euro pro Nacht buchen.\"",
+                    inaccurate: "\"Du darfst ein Hotel für maximal 200 Euro pro Nacht buchen.\""
                 },
-                aiAnswer: "The document notes that long-term remote work can lead to feelings of isolation among employees and a potential weakening of corporate culture due to the lack of spontaneous, informal interactions that typically occur in a physical office setting."
+                aiAnswer: "Die Firma X arbeitet global mit ausgewählten Hotelketten (Marriott, Motel One, NH Hotels) zusammen. Diese werden über das Travel-Portal automatisch priorisiert angezeigt. Bei geschäftlichen Hotelübernachtungen im Inland (Österreich, Deutschland und der Schweiz) gilt eine strikte Obergrenze von maximal 120 Euro pro Nacht inklusive Frühstück, WLAN und Steuern.",
+                highlightUrl: "doc3_travel-policy.html#:~:text=Obergrenze%20von%20maximal%20120%20Euro"
             },
             2: {
-                hint: "Now ask about strategies to mitigate these negative impacts.",
+                hint: "Aufgabe 6 prüfen:",
+                userTicket: "📩 Neues Ticket von: Moritz (Key Account Management) <br><br>\"Hi, mein Hinflug zum Kundenbesuch landet nächste Woche voraussichtlich recht spät. Ab welcher Uhrzeit abends ist es mir erlaubt, die Taxifahrt vom Flughafen zum Hotel auf Firmenkosten abzurechnen?\"",
                 options: {
-                    accurate: "I believe the AI's mitigation strategies are accurate",
-                    inaccurate: "I believe the AI's mitigation strategies are inaccurate"
+                    accurate: "\"Taxifahrten sind laut Richtlinie ab 20:00 Uhr erstattungsfähig.\"",
+                    inaccurate: "\"Taxifahrten sind laut Richtlinie ab 22:00 Uhr erstattungsfähig.\""
                 },
-                aiAnswer: "To mitigate these issues, the document recommends implementing structured virtual team-building activities, scheduling regular one-on-one video check-ins to monitor employee well-being, and, when feasible, organizing occasional in-person gatherings to strengthen team cohesion."
+                aiAnswer: "Am Zielort sollen vor allem öffentliche Verkehrsmittel (U-Bahn, Bus) genutzt werden. Taxifahrten (oder Ride-Sharing-Dienste wie Uber/Bolt) zum Hotel, Flughafen oder Bahnhof werden von Firma X nur erstattet, wenn die Fahrt nachweislich nach 20:00 Uhr erfolgt oder wenn schweres Messematerial (über 15 kg) transportiert werden muss.",
+                highlightUrl: "doc3_travel-policy.html#:~:text=nachweislich%20zwischen%2022%3A00%20Uhr%20und%2006%3A00%20Uhr"
             }
         }
     }
@@ -91,10 +106,7 @@ const hasPdfFrame = !!pdfFrame;
 // Determine interface type letter for tracking (Q for Questionnaire)
 const INTERFACE_TYPE = isQuestionnaire ? "Q" : (isInterfaceC ? "C" : (isInterfaceB ? "B" : "A"));
 
-// Interface-specific PDF settings
-const INITIAL_PDF_URL = isInterfaceC
-    ? `${PDF_BASE_URL}#page=1&zoom=100`
-    : `${PDF_BASE_URL}#page=3&zoom=100`;
+let currentDocUrl = "";
 
 let sessionId = "";
 let appGroup = sessionStorage.getItem('app_group') || "None";
@@ -199,9 +211,12 @@ function init() {
         sessionDisplay.innerText = `Session: ${sessionId}`;
     }
 
-    // 2. PDF Frame Setup (Interface B & C)
-    if (hasPdfFrame && pdfFrame) {
-        pdfFrame.src = INITIAL_PDF_URL;
+    // 2. PDF Frame Setup (Dynamic based on task document)
+    if (appStep > 0 && TASKS[appStep]) {
+        currentDocUrl = TASKS[appStep].docUrl;
+    }
+    if (hasPdfFrame && pdfFrame && currentDocUrl) {
+        pdfFrame.src = currentDocUrl;
     }
 
     // 3. Task Card Injection (Two-Phase Flow)
@@ -239,20 +254,23 @@ function renderTaskCard(phase) {
             <span class="task-label">Task ${appStep} — Question ${phase}</span>
             <h2 class="task-card-heading">${task.topic}</h2>
             <p class="task-card-description">${task.description}</p>
-            <p class="task-card-hint">${phaseData.hint}</p>
+            <div class="user-ticket-box" style="background:#f1f5f9; padding:10px; border-left:4px solid var(--primary-color); margin-bottom:1rem; font-style:italic; font-size: 0.95rem;">
+                ${phaseData.userTicket}
+            </div>
+            <p class="task-card-hint" style="font-weight:600; margin-bottom: 0.5rem; color: var(--primary-color);">${phaseData.hint}</p>
 
             <div class="option-group">
-                <label class="option-box disabled">
+                <label class="option-box disabled" style="font-size: 0.9rem;">
                     <input type="radio" name="accuracy-${phase}" value="accurate" disabled>
                     <span class="option-label">${phaseData.options.accurate}</span>
                 </label>
-                <label class="option-box disabled">
+                <label class="option-box disabled" style="font-size: 0.9rem;">
                     <input type="radio" name="accuracy-${phase}" value="inaccurate" disabled>
                     <span class="option-label">${phaseData.options.inaccurate}</span>
                 </label>
-                <label class="option-box disabled">
+                <label class="option-box disabled" style="font-size: 0.9rem;">
                     <input type="radio" name="accuracy-${phase}" value="cannot_answer" disabled>
-                    <span class="option-label">I can not answer this</span>
+                    <span class="option-label">Ich kann diese Frage nicht beantworten</span>
                 </label>
             </div>
 
@@ -262,7 +280,7 @@ function renderTaskCard(phase) {
             </div>
 
             <button class="card-next-button" id="card-next-btn" disabled>
-                ${phase === 1 ? 'Continue to Question 2' : 'Next Chatbot'}
+                ${phase === 1 ? 'Nächstes Ticket öffnen' : 'Nächste Aufgabe (Dokument wechseln)'}
             </button>
         </div>
     `;
@@ -382,10 +400,10 @@ function appendMessage(type, text) {
         if (isInterfaceB) {
             msgDiv.textContent = text;
         } else {
-            msgDiv.innerHTML = `${text} <a href="${INITIAL_PDF_URL}" class="citation-link" target="_blank" rel="noopener noreferrer">[1]</a>`;
+            msgDiv.innerHTML = `${text} <a href="${currentDocUrl}" class="citation-link" target="_blank" rel="noopener noreferrer">[1]</a>`;
             const citation = msgDiv.querySelector('.citation-link');
             citation.addEventListener('click', (e) => {
-                trackEvent('citation_click', 'citation-link', { pdfUrl: INITIAL_PDF_URL });
+                trackEvent('citation_click', 'citation-link', { pdfUrl: currentDocUrl });
             });
         }
     } else {
@@ -427,7 +445,7 @@ function streamMessage(text, onComplete) {
             // Streaming complete — add citation if not InterfaceB
             if (!isInterfaceB) {
                 const citation = document.createElement('a');
-                citation.href = INITIAL_PDF_URL;
+                citation.href = currentDocUrl;
                 citation.className = 'citation-link';
                 citation.target = '_blank';
                 citation.rel = 'noopener noreferrer';
@@ -499,15 +517,18 @@ function handleSend() {
             checkPhaseCompletion();
         });
 
-        // 5. Interface C Specific: Update PDF iframe with highlighting
-        if (isInterfaceC && pdfFrame) {
-            const highlightUrl = PDF_BASE_URL + "#:~:text=To%20mitigate%20the%20issue,trust%20in%20the%20AI%20answers.";
+        // 5. Interface Specific: Update PDF iframe with highlighting for both Interface B & C if supported,
+        // (Assuming you want fragments on the new HTML viewers. C usually updates the view based on the citation)
+        if ((isInterfaceC || isInterfaceB) && pdfFrame) {
+            const phaseHighlight = (TASKS[appStep] && TASKS[appStep].phases[currentPhase])
+                ? TASKS[appStep].phases[currentPhase].highlightUrl
+                : currentDocUrl;
 
-            console.log("Updating Interface C PDF frame...");
+            console.log("Updating document view to text fragment...");
             pdfFrame.src = "about:blank"; // Reset to ensure reload
 
             setTimeout(() => {
-                pdfFrame.src = highlightUrl;
+                pdfFrame.src = phaseHighlight;
             }, 100);
         }
     }, dynamicDelay);
