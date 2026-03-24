@@ -24,9 +24,9 @@
 
         <h2>2 Übernachtungskosten und Hotelbuchungen</h2>
         <p>FirmaX kooperiert weltweit mit ausgewählten Hotelketten (Marriott, Motel One, NH Hotels), die über das
-            Travel-Portal automatisch priorisiert angezeigt werden. Für geschäftliche Hotelübernachtungen im Inland
+            Travel-Portal automatisch priorisiert angezeigt werden. <span id="highlight-task-5">Für geschäftliche Hotelübernachtungen im Inland
             (Österreich, Deutschland, Schweiz) gilt eine strikte Obergrenze von maximal 120 Euro pro Nacht (inklusive
-            Frühstück, WLAN und Steuern). Für das übrige europäische Ausland liegt das Limit bei 150 Euro. In
+            Frühstück, WLAN und Steuern). Für das übrige europäische Ausland liegt das Limit bei 150 Euro.</span> In
             internationalen Gebieten (außerhalb Europas) gilt eine erhöhte Grenze von 200 Euro pro Nacht. Ausnahmen
             wegen Messezeiten müssen vorab genehmigt werden.</p>
 
@@ -66,10 +66,10 @@
         <p>Die Abrechnung von Mahlzeiten erfolgt ausschließlich über die länderspezifischen, gesetzlichen
             Pauschalbeträge (Per Diem). Eine Einzelabrechnung von Supermarktbelegen ist nicht möglich. Bewirtungskosten
             für Kundenessen sind absetzbar, müssen jedoch einen detaillierten, maschinell erstellten Bewirtungsbeleg mit
-            den Namen aller Teilnehmer und dem Geschäftszweck aufweisen. An Zielorten sind primär öffentliche
+            den Namen aller Teilnehmer und dem Geschäftszweck aufweisen. <span id="highlight-task-6">An Zielorten sind primär öffentliche
             Verkehrsmittel (U-Bahn, Bus) zu nutzen. Taxifahrten (oder Ride-Sharing-Dienste wie Uber/Bolt) zum Hotel,
             Flughafen oder Bahnhof werden von FirmaX nur erstattet, wenn die Fahrt nachweislich zwischen 22:00 Uhr und
-            06:00 Uhr stattfindet oder wenn schweres Messematerial (über 15 kg) transportiert werden muss.</p>
+            06:00 Uhr stattfindet oder wenn schweres Messematerial (über 15 kg) transportiert werden muss.</span></p>
 
         <h2>4 Transportmittel: Bahn, Flugzeug und Mietwagen</h2>
         <p>Aus ökologischen Gründen ist bei Strecken unter 400 Kilometern (bzw. einer Fahrzeit von unter 4 Stunden)
@@ -87,6 +87,28 @@
         <div class="pdf-footer">Seite 2 von 2</div>
     </div>
 
+    <script>
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'apply_highlight') {
+                document.querySelectorAll('.custom-highlight').forEach(el => el.classList.remove('custom-highlight'));
+                const targetEl = document.getElementById(event.data.taskId);
+                if (targetEl) {
+                    targetEl.classList.add('custom-highlight');
+                    setTimeout(() => targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+                }
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.location.hash && window.location.hash.startsWith('#highlight-task-')) {
+                const targetEl = document.getElementById(window.location.hash.substring(1));
+                if (targetEl) {
+                    targetEl.classList.add('custom-highlight');
+                    setTimeout(() => targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>

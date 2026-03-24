@@ -59,11 +59,11 @@
         <h2>2 Access Management und Passwortrichtlinien</h2>
         <p>Der Zugang zu Firmensystemen erfordert eine Multi-Faktor-Authentifizierung (MFA) via Authenticator-App auf
             dem Diensthandy. Passwörter müssen mindestens 14 Zeichen lang sein, alphanumerische Zeichen sowie
-            Sonderzeichen enthalten und dürfen keine Wörter aus dem Wörterbuch beinhalten. Zum Schutz der Accounts vor
+            Sonderzeichen enthalten und dürfen keine Wörter aus dem Wörterbuch beinhalten. <span id="highlight-task-3">Zum Schutz der Accounts vor
             Brute-Force-Angriffen müssen alle System-Passwörter zwingend alle 90 Tage erneuert werden. Das System
             verschickt 5 Tage, 3 Tage und 24 Stunden vor Ablauf eine automatische Erinnerung per E-Mail. Die Nutzung
             derselben Passwörter für private Zwecke oder auf externen Plattformen ist strengstens untersagt und stellt
-            einen Verstoß gegen die Compliance-Richtlinien dar.</p>
+            einen Verstoß gegen die Compliance-Richtlinien dar.</span></p>
 
         <div class="pdf-footer">Seite 1 von 2</div>
     </div>
@@ -77,11 +77,11 @@
             ist am Firmen-Laptop gestattet, der Datentransfer jedoch softwareseitig blockiert.</p>
 
         <h2>4 Incident Response: Meldepflicht bei Sicherheitsvorfällen und Verlust</h2>
-        <p>Jeder Verdacht auf eine Kompromittierung ist ernst zu nehmen. Verdächtige E-Mails (Phishing-Versuche) sind
+        <p><span id="highlight-task-4">Jeder Verdacht auf eine Kompromittierung ist ernst zu nehmen. Verdächtige E-Mails (Phishing-Versuche) sind
             nicht weiterzuleiten, sondern umgehend über den "Phish-Report-Button" in Microsoft Outlook an das Security
             Operations Center (SOC) zu melden. Bei Diebstahl, Liegenlassen oder physischem Verlust eines Firmen-Laptops,
             Tablets oder Diensthandys muss die IT-Hotline (+43 512 000-999) zwingend innerhalb von 2 Stunden nach
-            Feststellung des Verlusts telefonisch informiert werden. Nur durch diese schnelle Meldung kann eine
+            Feststellung des Verlusts telefonisch informiert werden.</span> Nur durch diese schnelle Meldung kann eine
             sofortige Fernlöschung (Remote-Wipe) aller lokalen Daten eingeleitet und der Netzwerkzugang gesperrt werden.
             Eine Meldung per E-Mail ist bei Hardware-Verlust nicht ausreichend.</p>
 
@@ -93,6 +93,28 @@
         <div class="pdf-footer">Seite 2 von 2</div>
     </div>
 
+    <script>
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'apply_highlight') {
+                document.querySelectorAll('.custom-highlight').forEach(el => el.classList.remove('custom-highlight'));
+                const targetEl = document.getElementById(event.data.taskId);
+                if (targetEl) {
+                    targetEl.classList.add('custom-highlight');
+                    setTimeout(() => targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+                }
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.location.hash && window.location.hash.startsWith('#highlight-task-')) {
+                const targetEl = document.getElementById(window.location.hash.substring(1));
+                if (targetEl) {
+                    targetEl.classList.add('custom-highlight');
+                    setTimeout(() => targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>

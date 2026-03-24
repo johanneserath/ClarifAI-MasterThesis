@@ -15,21 +15,21 @@ const TASKS = {
                 hint: "Aufgabe 1 prüfen:",
                 userTicket: "📩 Neues Ticket von: Lisa (Sales) <br><br>\"Hallo liebes Support-Team, ich bin seit diesem Monat in einem neuen Fitnessstudio angemeldet und würde gerne den Corporate-Benefit nutzen. Welchen Betrag darf ich bei der Spesenabrechnung für das Fitnessstudio maximal geltend machen?\"",
                 options: {
-                    accurate: "\"Du kannst monatlich bis zu 40 Euro für das Fitnessstudio abrechnen.\"",
-                    inaccurate: "\"Du kannst monatlich bis zu 50 Euro für das Fitnessstudio abrechnen.\""
+                    "1": "\"Du kannst monatlich bis zu 40 Euro für das Fitnessstudio abrechnen.\"",
+                    "2": "\"Du kannst monatlich bis zu 50 Euro für das Fitnessstudio abrechnen.\""
                 },
                 aiAnswer: "Zertifizierte Fitnessstudios und Yoga-Zentren erhielten im vergangenen Jahr eine Erhöhung des monatlichen Gesundheitszuschusses auf 40 Euro (zuvor waren es 30 Euro). Der Betrag kann unter dem Code #Fit26 im Rahmen der regulären monatlichen Spesenabrechnung zurückgeholt werden.",
-                highlightUrl: "doc2_hr-guideline.html#:~:text=Der%20monatliche%20Gesundheitszuschuss,angehoben"
+                highlightUrl: "doc2_hr-guideline.html#highlight-task-1"
             },
             2: {
                 hint: "Aufgabe 2 prüfen:",
                 userTicket: "📩 Neues Ticket von: Markus (Projektmanagement) <br><br>\"Hi, ich muss für ein abteilungsübergreifendes Projekt ein tägliches Status-Meeting aufsetzen, bei dem Anwesenheitspflicht herrscht. In welchem Zeitfenster liegt unsere offizielle Kernarbeitszeit, damit ich das Meeting sicher planen kann?\"",
                 options: {
-                    accurate: "\"Bitte plane das Meeting im Fenster zwischen 09:00 und 15:00 Uhr.\"",
-                    inaccurate: "\"Bitte plane das Meeting im Fenster zwischen 10:00 und 15:00 Uhr.\""
+                    "1": "\"Bitte plane das Meeting im Fenster zwischen 09:00 und 15:00 Uhr.\"",
+                    "2": "\"Bitte plane das Meeting im Fenster zwischen 10:00 und 15:00 Uhr.\""
                 },
                 aiAnswer: "Der IT-Support und der Kundenservice arbeiten mit eigenen Schichtplänen. In allen anderen Abteilungen ist eine verbindliche Kernarbeitszeit von 09:00 bis 15:00 Uhr festgelegt. Während dieses Zeitraums wird erwartet, dass das Team für Meetings und Kundenanrufe jederzeit erreichbar ist. In den Zeiten dazwischen gibt es Gleitzeit.",
-                highlightUrl: "doc2_hr-guideline.html#:~:text=verbindliche%20Kernarbeitszeit%20von%2010"
+                highlightUrl: "doc2_hr-guideline.html#highlight-task-2"
             }
         }
     },
@@ -42,21 +42,21 @@ const TASKS = {
                 hint: "Aufgabe 3 prüfen:",
                 userTicket: "📩 Neues Ticket von: Sarah (Accounting) <br><br>\"Moin, ich habe heute mein System-Passwort neu gesetzt und möchte mir direkt einen Kalender-Reminder für den nächsten Wechsel einstellen. Nach wie vielen Tagen zwingt mich das System ohnehin zum Wechsel?\"",
                 options: {
-                    accurate: "\"Stell dir den Reminder auf 60 Tage ein.\"",
-                    inaccurate: "\"Stell dir den Reminder auf 90 Tage ein.\""
+                    "1": "\"Stell dir den Reminder auf 60 Tage ein.\"",
+                    "2": "\"Stell dir den Reminder auf 90 Tage ein.\""
                 },
                 aiAnswer: "Um Accounts vor Brute-Force-Attacken zu schützen, müssen alle Passwörter im System unbedingt alle 60 Tage gewechselt werden. 5 Tage, 3 Tage und 24 Stunden vor Ablauf sendet das System automatisch eine E-Mail-Erinnerung. Das Verwenden der gleichen Passwörter für private Zwecke oder auf externen Plattformen ist absolut verboten und verstößt gegen die Compliance-Richtlinien.",
-                highlightUrl: "doc1_it-security.html#:~:text=zwingend%20alle%2090%20Tage%20erneuert"
+                highlightUrl: "doc1_it-security.html#highlight-task-3"
             },
             2: {
                 hint: "Aufgabe 4 prüfen:",
                 userTicket: "📩 Neues Ticket von: Thomas (Consulting) <br><br>\"Hilfe! Mein Firmen-Laptop wurde gerade im ICE gestohlen. Ich bin auf dem Weg zur Polizei, aber wie viel Zeit habe ich maximal, um den Verlust offiziell bei der IT zu melden, bevor es eine Abmahnung gibt?\"",
                 options: {
-                    accurate: "\"Du musst den Verlust zwingend innerhalb von 2 Stunden melden.\"",
-                    inaccurate: "\"Du musst den Verlust zwingend innerhalb von 5 Stunden melden.\""
+                    "1": "\"Du musst den Verlust zwingend innerhalb von 2 Stunden melden.\"",
+                    "2": "\"Du musst den Verlust zwingend innerhalb von 5 Stunden melden.\""
                 },
                 aiAnswer: "Bei Diebstahl, Liegenlassen oder physischem Verlust eines Firmen-Laptops, Tablets oder Diensthandys muss innerhalb von zwei Stunden nach Feststellung des Verlusts die IT-Hotline (+43 512 000-999) telefonisch benachrichtigt werden. Nur durch diese zügige Meldung kann eine umgehende Fernlöschung (Remote-Wipe) sämtlicher lokaler Daten eingeleitet und der Netzwerkzugang gesperrt werden. Eine E-Mail-Mitteilung ist bei Verlust von Hardware nicht ausreichend.",
-                highlightUrl: "doc1_it-security.html#:~:text=innerhalb%20von%202%20Stunden"
+                highlightUrl: "doc1_it-security.html#highlight-task-4"
             }
         }
     },
@@ -69,21 +69,21 @@ const TASKS = {
                 hint: "Aufgabe 5 prüfen:",
                 userTicket: "📩 Neues Ticket von: Elena (Marketing) <br><br>\"Hallo Support, ich reise nächste Woche für eine Messe nach München (Deutschland). Das Tool zeigt mir viele verschiedene Hotels an. Was ist unsere absolute preisliche Obergrenze pro Nacht für Inlandsreisen?\"",
                 options: {
-                    accurate: "\"Du darfst ein Hotel für maximal 120 Euro pro Nacht buchen.\"",
-                    inaccurate: "\"Du darfst ein Hotel für maximal 200 Euro pro Nacht buchen.\""
+                    "1": "\"Du darfst ein Hotel für maximal 120 Euro pro Nacht buchen.\"",
+                    "2": "\"Du darfst ein Hotel für maximal 200 Euro pro Nacht buchen.\""
                 },
                 aiAnswer: "Die Firma X arbeitet global mit ausgewählten Hotelketten (Marriott, Motel One, NH Hotels) zusammen. Diese werden über das Travel-Portal automatisch priorisiert angezeigt. Bei geschäftlichen Hotelübernachtungen im Inland (Österreich, Deutschland und der Schweiz) gilt eine strikte Obergrenze von maximal 120 Euro pro Nacht inklusive Frühstück, WLAN und Steuern.",
-                highlightUrl: "doc3_travel-policy.html#:~:text=Obergrenze%20von%20maximal%20120%20Euro"
+                highlightUrl: "doc3_travel-policy.html#highlight-task-5"
             },
             2: {
                 hint: "Aufgabe 6 prüfen:",
                 userTicket: "📩 Neues Ticket von: Moritz (Key Account Management) <br><br>\"Hi, mein Hinflug zum Kundenbesuch landet nächste Woche voraussichtlich recht spät. Ab welcher Uhrzeit abends ist es mir erlaubt, die Taxifahrt vom Flughafen zum Hotel auf Firmenkosten abzurechnen?\"",
                 options: {
-                    accurate: "\"Taxifahrten sind laut Richtlinie ab 20:00 Uhr erstattungsfähig.\"",
-                    inaccurate: "\"Taxifahrten sind laut Richtlinie ab 22:00 Uhr erstattungsfähig.\""
+                    "1": "\"Taxifahrten sind laut Richtlinie ab 20:00 Uhr erstattungsfähig.\"",
+                    "2": "\"Taxifahrten sind laut Richtlinie ab 22:00 Uhr erstattungsfähig.\""
                 },
                 aiAnswer: "Am Zielort sollen vor allem öffentliche Verkehrsmittel (U-Bahn, Bus) genutzt werden. Taxifahrten (oder Ride-Sharing-Dienste wie Uber/Bolt) zum Hotel, Flughafen oder Bahnhof werden von Firma X nur erstattet, wenn die Fahrt nachweislich nach 20:00 Uhr erfolgt oder wenn schweres Messematerial (über 15 kg) transportiert werden muss.",
-                highlightUrl: "doc3_travel-policy.html#:~:text=nachweislich%20zwischen%2022%3A00%20Uhr%20und%2006%3A00%20Uhr"
+                highlightUrl: "doc3_travel-policy.html#highlight-task-6"
             }
         }
     }
@@ -143,11 +143,14 @@ if (!supabaseClient) {
 async function trackEvent(eventType, elementId = null) {
     const timeOnPage = ((Date.now() - pageStartTime) / 1000);
 
+    const computedTaskNumber = isQuestionnaire ? 0 : ((appStep - 1) * 2 + currentPhase);
+    const computedPhaseNumber = isQuestionnaire ? 0 : appStep;
+
     const event = {
         user_id: sessionId,
         group_id: appGroup,
-        task_number: isQuestionnaire ? 0 : appStep,
-        phase_number: isQuestionnaire ? 0 : currentPhase,
+        task_number: computedTaskNumber,
+        phase_number: computedPhaseNumber,
         interface_type: INTERFACE_TYPE,
         event_type: eventType,
         element_id: elementId,
@@ -176,13 +179,16 @@ async function trackEvent(eventType, elementId = null) {
 async function logChatPrompt(promptText) {
     if (!supabaseClient) return;
 
+    const computedTaskNumber = ((appStep - 1) * 2 + currentPhase);
+    const computedPhaseNumber = appStep;
+
     const data = {
         user_id: sessionId,
         prompt_text: promptText,
         interface_type: INTERFACE_TYPE,
-        task_number: appStep,
-        phase_number: currentPhase, // Tracks Question 1 or 2
-        group_id: appGroup          // Tracks study group
+        task_number: computedTaskNumber,
+        phase_number: computedPhaseNumber,
+        group_id: appGroup
     };
 
     console.log("Logging chat prompt:", data);
@@ -193,6 +199,57 @@ async function logChatPrompt(promptText) {
 
     if (error) {
         console.error("Supabase Error (chatPrompts_log):", error);
+    }
+}
+
+/**
+ * UTILITY: LOG TASK ANSWER
+ * Logs the specific final answer choice selected for a task.
+ */
+async function logTaskAnswer(selectedValue, optionalComment = '') {
+    if (!supabaseClient) return;
+
+    let isCorrect = false;
+    if (selectedValue !== '3') {
+        const s = appStep;
+        const p = currentPhase;
+        // Mapping of logic (Task -> Step & Phase):
+        // Task 1: (HR: Fitness) -> correct is 40 ('1')
+        if (s === 1 && p === 1 && selectedValue === '1') isCorrect = true;     
+        // Task 2: (HR: Kernzeit) -> KI hallucinates 09:00, correct is 10:00 ('2')
+        if (s === 1 && p === 2 && selectedValue === '2') isCorrect = true;   
+        // Task 3: (IT: Passwort) -> KI hallucinates 60, correct is 90 ('2')
+        if (s === 2 && p === 1 && selectedValue === '2') isCorrect = true;   
+        // Task 4: (IT: Laptop) -> correct is 2h ('1')
+        if (s === 2 && p === 2 && selectedValue === '1') isCorrect = true;     
+        // Task 5: (Travel: Hotel) -> correct is 120 ('1')
+        if (s === 3 && p === 1 && selectedValue === '1') isCorrect = true;     
+        // Task 6: (Travel: Taxi) -> KI hallucinates 20, correct is 22 ('2')
+        if (s === 3 && p === 2 && selectedValue === '2') isCorrect = true;   
+    }
+
+    const computedTaskNumber = ((appStep - 1) * 2 + currentPhase);
+    const computedPhaseNumber = appStep;
+
+    const data = {
+        user_id: sessionId,
+        group_id: appGroup,
+        interface_type: INTERFACE_TYPE,
+        task_number: computedTaskNumber,
+        phase_number: computedPhaseNumber,
+        selected_value: selectedValue,
+        is_correct: isCorrect,
+        optional_comment: optionalComment
+    };
+
+    console.log("Logging task answer:", data);
+
+    const { error } = await supabaseClient
+        .from('task_answers_log')
+        .insert([data]);
+
+    if (error) {
+        console.error("Supabase Error (task_answers_log):", error);
     }
 }
 
@@ -249,9 +306,11 @@ function renderTaskCard(phase) {
     const phaseData = task.phases[phase];
     if (!phaseData) return;
 
+    const computedTaskNumber = ((appStep - 1) * 2 + phase);
+
     taskContainer.innerHTML = `
         <div class="task-card">
-            <span class="task-label">Task ${appStep} — Question ${phase}</span>
+            <span class="task-label">Phase ${appStep} — Task ${computedTaskNumber}</span>
             <h2 class="task-card-heading">${task.topic}</h2>
             <p class="task-card-description">${task.description}</p>
             <div class="user-ticket-box" style="background:#f1f5f9; padding:10px; border-left:4px solid var(--primary-color); margin-bottom:1rem; font-style:italic; font-size: 0.95rem;">
@@ -261,15 +320,15 @@ function renderTaskCard(phase) {
 
             <div class="option-group">
                 <label class="option-box disabled" style="font-size: 0.9rem;">
-                    <input type="radio" name="accuracy-${phase}" value="accurate" disabled>
-                    <span class="option-label">${phaseData.options.accurate}</span>
+                    <input type="radio" name="accuracy-${phase}" value="1" disabled>
+                    <span class="option-label">${phaseData.options["1"]}</span>
                 </label>
                 <label class="option-box disabled" style="font-size: 0.9rem;">
-                    <input type="radio" name="accuracy-${phase}" value="inaccurate" disabled>
-                    <span class="option-label">${phaseData.options.inaccurate}</span>
+                    <input type="radio" name="accuracy-${phase}" value="2" disabled>
+                    <span class="option-label">${phaseData.options["2"]}</span>
                 </label>
                 <label class="option-box disabled" style="font-size: 0.9rem;">
-                    <input type="radio" name="accuracy-${phase}" value="cannot_answer" disabled>
+                    <input type="radio" name="accuracy-${phase}" value="3" disabled>
                     <span class="option-label">Ich kann diese Frage nicht beantworten</span>
                 </label>
             </div>
@@ -293,7 +352,7 @@ function renderTaskCard(phase) {
 
             const whyContainer = document.getElementById('why-textbox-container');
             if (whyContainer) {
-                if (radio.value === 'cannot_answer') {
+                if (radio.value === '3') {
                     whyContainer.style.display = 'block';
                 } else {
                     whyContainer.style.display = 'none';
@@ -327,6 +386,10 @@ function checkPhaseCompletion() {
  * HANDLE CARD NEXT BUTTON
  */
 function handleCardNext() {
+    // 1. Get the selected option BEFORE we move to phase 2 or navigate away
+    const selectedRadio = document.querySelector(`input[name="accuracy-${currentPhase}"]:checked`);
+    const selectedValue = selectedRadio ? selectedRadio.value : 'none';
+
     // Check if the user filled out the optional "why" textbox
     const whyContainer = document.getElementById('why-textbox-container');
     const whyTextarea = document.getElementById('why-textarea');
@@ -334,6 +397,9 @@ function handleCardNext() {
     if (whyContainer && whyContainer.style.display !== 'none' && whyTextarea) {
         whyReason = whyTextarea.value.trim();
     }
+    
+    // Log the answer to the new table
+    logTaskAnswer(selectedValue, whyReason);
 
     if (currentPhase === 1) {
         // Move to phase 2: reset state and re-render card
@@ -445,7 +511,13 @@ function streamMessage(text, onComplete) {
             // Streaming complete — add citation if not InterfaceB
             if (!isInterfaceB) {
                 const citation = document.createElement('a');
-                citation.href = currentDocUrl;
+                
+                let linkUrl = currentDocUrl;
+                if (TASKS[appStep] && TASKS[appStep].phases[currentPhase] && TASKS[appStep].phases[currentPhase].highlightUrl) {
+                    linkUrl = TASKS[appStep].phases[currentPhase].highlightUrl;
+                }
+                
+                citation.href = linkUrl;
                 citation.className = 'citation-link';
                 citation.target = '_blank';
                 citation.rel = 'noopener noreferrer';
@@ -517,19 +589,18 @@ function handleSend() {
             checkPhaseCompletion();
         });
 
-        // 5. Interface Specific: Update PDF iframe with highlighting for both Interface B & C if supported,
-        // (Assuming you want fragments on the new HTML viewers. C usually updates the view based on the citation)
+        // 5. Interface Specific: Update PDF iframe with highlighting for both Interface B & C if supported
         if ((isInterfaceC || isInterfaceB) && pdfFrame) {
-            const phaseHighlight = (TASKS[appStep] && TASKS[appStep].phases[currentPhase])
-                ? TASKS[appStep].phases[currentPhase].highlightUrl
-                : currentDocUrl;
-
-            console.log("Updating document view to text fragment...");
-            pdfFrame.src = "about:blank"; // Reset to ensure reload
-
+            console.log("Applying text highlight via postMessage...");
+            const computedTaskNumber = ((appStep - 1) * 2 + currentPhase);
+            const targetId = `highlight-task-${computedTaskNumber}`;
+            
             setTimeout(() => {
-                pdfFrame.src = phaseHighlight;
-            }, 100);
+                pdfFrame.contentWindow.postMessage({
+                    type: 'apply_highlight',
+                    taskId: targetId
+                }, '*');
+            }, 500); // Allow brief render time
         }
     }, dynamicDelay);
 }
