@@ -100,6 +100,7 @@
         });
 
         window.addEventListener('DOMContentLoaded', () => {
+            // 1. Highlight specific text if deep-linked
             if (window.location.hash && window.location.hash.startsWith('#highlight-task-')) {
                 const targetEl = document.getElementById(window.location.hash.substring(1));
                 if (targetEl) {
@@ -107,6 +108,44 @@
                     setTimeout(() => targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
                 }
             }
+            // 2. Apply interactive blur effect to all semantic content blocks
+            const trackableElements = document.querySelectorAll('.pdf-page p, .pdf-page h2, .pdf-page table, .pdf-page li, .pdf-image-placeholder');
+            trackableElements.forEach((el) => {
+                el.style.filter = 'blur(6px)';
+                el.style.transition = 'filter 0.2s ease-in-out';
+                el.style.cursor = 'help'; 
+
+                let hoverStart = 0;
+
+                el.addEventListener('mouseenter', () => {
+                    el.style.filter = 'blur(0px)';
+                    if (el.querySelector('[id^="highlight-task-"]') || el.id.startsWith('highlight-task-')) {
+                        hoverStart = Date.now();
+                    }
+                });
+
+                el.addEventListener('mouseleave', () => {
+                    el.style.filter = 'blur(6px)';
+                    if (hoverStart > 0) {
+                        const MathDuration = Date.now() - hoverStart;
+                        const targetNode = el.querySelector('[id^="highlight-task-"]') || el;
+                        const targetId = targetNode.id;
+                        
+                        if (MathDuration > 150 && targetId) {
+                            const targetWindow = (window.opener && window.opener !== window) ? window.opener : (window.parent !== window ? window.parent : null);
+                            if (targetWindow) {
+                                targetWindow.postMessage({
+                                    type: 'source_tracking_event',
+                                    action: 'target_hover_completed',
+                                    elementId: targetId,
+                                    durationMs: MathDuration
+                                }, '*');
+                            }
+                        }
+                        hoverStart = 0;
+                    }
+                });
+            });
         });
     </script>
 </body>

@@ -1,7 +1,3 @@
-
-// Track start time for time_on_page calculation
-const pageStartTime = Date.now();
-
 const STATIC_ANSWER_TEXT = "This text will be shown to everyone that asks any question in the chat window";
 const PDF_BASE_URL = "MT0_ErathJohannes_2_Pager.pdf";
 
@@ -93,6 +89,7 @@ const TASKS = {
 let currentPhase = 1;      // 1 or 2
 let promptSentInPhase = false;
 let optionSelectedInPhase = false;
+let cumulativeHoverTimeOnTarget = 0; // Tracks valid hover duration for the current active task
 
 // Detection for Interfaces
 const isInterfaceA = window.location.pathname.toLowerCase().includes('interfacea.html');
@@ -140,9 +137,7 @@ if (!supabaseClient) {
 /**
  * UTILITY: TRACK EVENT
  */
-async function trackEvent(eventType, elementId = null) {
-    const timeOnPage = ((Date.now() - pageStartTime) / 1000);
-
+async function trackEvent(eventType, elementId = null, hoverDurationMs = null) {
     const computedTaskNumber = isQuestionnaire ? 0 : ((appStep - 1) * 2 + currentPhase);
     const computedPhaseNumber = isQuestionnaire ? 0 : appStep;
 
@@ -154,7 +149,7 @@ async function trackEvent(eventType, elementId = null) {
         interface_type: INTERFACE_TYPE,
         event_type: eventType,
         element_id: elementId,
-        time_on_page: timeOnPage
+        hover_duration_ms: hoverDurationMs
     };
 
     console.log("Tracking event:", event);
@@ -250,6 +245,7 @@ async function logTaskAnswer(selectedValue, optionalComment = '') {
 
     if (error) {
         console.error("Supabase Error (task_answers_log):", error);
+        alert(`Supabase Error (${error.code || 'DB'}):\n${error.message}\nDetails: ${error.details}`);
     }
 }
 
@@ -285,11 +281,6 @@ function init() {
     const nextBtn = document.getElementById('next-task-button');
     if (nextBtn) {
         nextBtn.disabled = true;
-    }
-
-    // Track page load (only for interface tasks, not questionnaire)
-    if (!isQuestionnaire) {
-        trackEvent('page_load', 'window');
     }
 }
 
@@ -398,7 +389,14 @@ function handleCardNext() {
         whyReason = whyTextarea.value.trim();
     }
     
-    // Log the answer to the new table
+    // Log the aggregated hover duration to interaction_logs BEFORE moving to the next phase
+    if (cumulativeHoverTimeOnTarget > 0) {
+        const expectedTaskNumber = ((appStep - 1) * 2 + currentPhase);
+        trackEvent('target_hover_completed', `highlight-task-${expectedTaskNumber}`, cumulativeHoverTimeOnTarget);
+        cumulativeHoverTimeOnTarget = 0; // Reset for the next phase!
+    }
+
+    // Log the answer to the task answers table
     logTaskAnswer(selectedValue, whyReason);
 
     if (currentPhase === 1) {
@@ -407,9 +405,6 @@ function handleCardNext() {
         promptSentInPhase = false;
         optionSelectedInPhase = false;
 
-        if (whyReason) {
-            trackEvent('cannot_answer_reason', whyReason);
-        }
         trackEvent('card_next_click', 'phase_1_complete');
 
         // Re-enable chat input for phase 2
@@ -423,9 +418,6 @@ function handleCardNext() {
 
         renderTaskCard(2);
     } else {
-        if (whyReason) {
-            trackEvent('cannot_answer_reason', whyReason);
-        }
         trackEvent('card_next_click', 'phase_2_complete');
 
         // Disable the card button while navigating
@@ -466,7 +458,7 @@ function appendMessage(type, text) {
         if (isInterfaceB) {
             msgDiv.textContent = text;
         } else {
-            msgDiv.innerHTML = `${text} <a href="${currentDocUrl}" class="citation-link" target="_blank" rel="noopener noreferrer">[1]</a>`;
+            msgDiv.innerHTML = `${text} <a href="${currentDocUrl}" class="citation-link" target="_blank" rel="opener">[1]</a>`;
             const citation = msgDiv.querySelector('.citation-link');
             citation.addEventListener('click', (e) => {
                 trackEvent('citation_click', 'citation-link', { pdfUrl: currentDocUrl });
@@ -520,7 +512,7 @@ function streamMessage(text, onComplete) {
                 citation.href = linkUrl;
                 citation.className = 'citation-link';
                 citation.target = '_blank';
-                citation.rel = 'noopener noreferrer';
+                citation.rel = 'opener';
                 citation.textContent = ' [1]';
                 citation.addEventListener('click', () => {
                     trackEvent('citation_click', 'citation-link');
@@ -641,20 +633,14 @@ function handleNextTask() {
  */
 if (sendBtn) {
     sendBtn.addEventListener('click', () => {
-        trackEvent('ask_button_click', 'send-button');
         handleSend();
     });
 }
 
 if (userInput) {
-    userInput.addEventListener('click', () => {
-        trackEvent('input_click', 'user-input');
-    });
-
     userInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            trackEvent('enter_pressed', 'user-input');
             handleSend();
         }
     });
@@ -696,6 +682,22 @@ const optOutBtn = document.getElementById('opt-out-button');
 if (optOutBtn) {
     optOutBtn.addEventListener('click', handleOptOut);
 }
+
+// Add global listener for hover tracking events deeply nested in iframes
+window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'source_tracking_event') {
+        if (event.data.action === 'target_hover_completed') {
+            const expectedTaskNumber = ((appStep - 1) * 2 + currentPhase);
+            const expectedId = `highlight-task-${expectedTaskNumber}`;
+
+            // Only sum up time spent hovering over the EXACT right paragraph for the current question
+            if (event.data.elementId === expectedId) {
+                cumulativeHoverTimeOnTarget += event.data.durationMs;
+                console.log(`Accumulated +${event.data.durationMs}ms hover on Target ${expectedId}. Total now: ${cumulativeHoverTimeOnTarget}ms`);
+            }
+        }
+    }
+});
 
 // Start
 document.addEventListener('DOMContentLoaded', init);
