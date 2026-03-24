@@ -23,11 +23,11 @@
 
         <h2>2 Arbeitszeitmodelle, Schichtbetrieb und Erreichbarkeit</h2>
         <p>Der generelle Arbeitsrahmen erstreckt sich von 06:00 bis 20:00 Uhr. Für den IT-Support und den Kundenservice
-            gelten separate Schichtpläne. Für alle anderen Abteilungen gilt eine verbindliche Kernarbeitszeit von 10:00
+            gelten separate Schichtpläne. <span id="highlight-task-2">Für alle anderen Abteilungen gilt eine verbindliche Kernarbeitszeit von 10:00
             bis 15:00 Uhr. In diesem Zeitraum wird absolute Erreichbarkeit für Team-Meetings und Kunden-Calls
             vorausgesetzt. Außerhalb dieser Zeiten herrscht Gleitzeit. Überstunden werden ab der 10. Stunde im Monat auf
             ein Langzeitkonto transferiert, müssen jedoch zwingend vorher vom jeweiligen Abteilungsleiter genehmigt
-            werden.</p>
+            werden.</span></p>
 
         <div class="pdf-image-placeholder" style="border: none; background: transparent;">
             <img src="img/kernzeiten.png" id="img-arbeitszeit" alt="Arbeitszeitrahmen und Kernzeit"
@@ -49,10 +49,10 @@
         <h2>4 Gesundheit, Mobilität und Wellbeing</h2>
         <p>Prävention ist ein zentraler Baustein unserer Unternehmenskultur. Jeder Mitarbeitende hat Anspruch auf bis zu
             drei kostenlose, psychologische Beratungsstunden pro Quartal über unseren externen Partner "MindCare".
-            FirmaX unterstützt zudem sportliche Aktivitäten der Belegschaft. Der monatliche Gesundheitszuschuss für
+            FirmaX unterstützt zudem sportliche Aktivitäten der Belegschaft. <span id="highlight-task-1">Der monatliche Gesundheitszuschuss für
             zertifizierte Fitnessstudios und Yoga-Zentren wurde im vergangenen Jahr auf 40 Euro angehoben (früher 30
             Euro). Der Betrag kann monatlich über die reguläre Spesenabrechnung unter dem Code #Fit26 zurückgefordert
-            werden. Zudem bezuschussen wir Bildschirmarbeitsplatzbrillen alle zwei Jahre mit bis zu 150 Euro. Das
+            werden. Zudem bezuschussen wir Bildschirmarbeitsplatzbrillen alle zwei Jahre mit bis zu 150 Euro.</span> Das
             beliebte Leasing-Programm für E-Bikes und Fahrräder bleibt bei 15 % Eigenanteil vom Listenpreis bestehen.
         </p>
 
@@ -92,6 +92,28 @@
         <div class="pdf-footer">Seite 2 von 2</div>
     </div>
 
+    <script>
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'apply_highlight') {
+                document.querySelectorAll('.custom-highlight').forEach(el => el.classList.remove('custom-highlight'));
+                const targetEl = document.getElementById(event.data.taskId);
+                if (targetEl) {
+                    targetEl.classList.add('custom-highlight');
+                    setTimeout(() => targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+                }
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.location.hash && window.location.hash.startsWith('#highlight-task-')) {
+                const targetEl = document.getElementById(window.location.hash.substring(1));
+                if (targetEl) {
+                    targetEl.classList.add('custom-highlight');
+                    setTimeout(() => targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>

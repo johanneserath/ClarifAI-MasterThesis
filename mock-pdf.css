@@ -113,3 +113,11 @@ body.pdf-viewer {
     object-fit: contain;
     display: none; /* Hide real img initially */
 }
+
+/* Highlight class for Task Responses */
+.custom-highlight {
+    background-color: rgba(255, 255, 0, 0.4);
+    transition: background-color 0.5s ease;
+    border-radius: 3px;
+    padding: 2px 0;
+}
