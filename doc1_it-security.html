@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FirmaX IT-Security-Guideline.pdf</title>
+    <link rel="stylesheet" href="mock-pdf.css">
+</head>
+
+<body class="pdf-viewer">
+
+    <div class="pdf-page">
+        <img src="img/logo firmax teal.png" alt="FirmaX Logo" class="pdf-logo">
+        <h1>FirmaX IT-Security-Guideline</h1>
+        <div class="subtitle">(Stand: Januar 2026)</div>
+
+        <h2>1 Grundsätze der Informationssicherheit und Datenklassifizierung</h2>
+        <p>Der Schutz sensibler Unternehmens- und Kundendaten hat bei FirmaX höchste Priorität und ist
+            geschäftskritisch. Alle Unternehmensdaten werden in drei Kategorien eingeteilt: Öffentlich (Public), Intern
+            (Internal) und Streng Vertraulich (Confidential). Kundendaten aus dem CRM fallen grundsätzlich unter
+            "Confidential" und dürfen das Firmennetzwerk nicht verlassen. Für den Zugriff von außen ist zwingend der
+            Cisco AnyConnect VPN-Client zu nutzen.</p>
+
+        <p><strong>Informationssicherheit und Datenklassifizierung bei FirmaX:</strong></p>
+        <table>
+            <thead>
+                <tr>
+                    <th
+                        style="border-right: 1px solid #000; border-left: none; border-top: 1px solid #000; border-bottom: 1px solid #000; width: 30%; background: none;">
+                        Kategorie</th>
+                    <th
+                        style="border-left: none; border-right: none; border-top: 1px solid #000; border-bottom: 1px solid #000; background: none;">
+                        Beschreibung</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="border-right: 1px solid #000; border-left: none; border-bottom: 1px solid #000;">
+                        Priorität</td>
+                    <td style="border-left: none; border-right: none; border-bottom: 1px solid #000;">Der Schutz von
+                        Unternehmens- und Kundendaten ist geschäftskritisch und hat höchste Priorität</td>
+                </tr>
+                <tr>
+                    <td style="border-right: 1px solid #000; border-left: none; border-bottom: 1px solid #000;">
+                        Datenklassifizierung</td>
+                    <td style="border-left: none; border-right: none; border-bottom: 1px solid #000;">Öffentlich
+                        (Public)<br>Intern (Internal)<br>Streng Vertraulich (Confidential)</td>
+                </tr>
+                <tr>
+                    <td style="border-right: 1px solid #000; border-left: none; border-bottom: 1px solid #000;">
+                        Sicherheitsauflage</td>
+                    <td style="border-left: none; border-right: none; border-bottom: 1px solid #000;">Kundendaten dürfen
+                        das Firmennetzwerk nicht verlassen</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>2 Access Management und Passwortrichtlinien</h2>
+        <p>Der Zugang zu Firmensystemen erfordert eine Multi-Faktor-Authentifizierung (MFA) via Authenticator-App auf
+            dem Diensthandy. Passwörter müssen mindestens 14 Zeichen lang sein, alphanumerische Zeichen sowie
+            Sonderzeichen enthalten und dürfen keine Wörter aus dem Wörterbuch beinhalten. Zum Schutz der Accounts vor
+            Brute-Force-Angriffen müssen alle System-Passwörter zwingend alle 90 Tage erneuert werden. Das System
+            verschickt 5 Tage, 3 Tage und 24 Stunden vor Ablauf eine automatische Erinnerung per E-Mail. Die Nutzung
+            derselben Passwörter für private Zwecke oder auf externen Plattformen ist strengstens untersagt und stellt
+            einen Verstoß gegen die Compliance-Richtlinien dar.</p>
+
+        <div class="pdf-footer">Seite 1 von 2</div>
+    </div>
+
+    <div class="pdf-page">
+        <h2>3 Umgang mit Endgeräten (Hardware) und externen Speichermedien</h2>
+        <p>Jeder Mitarbeitende ist für die ihm anvertraute Hardware verantwortlich. Die Nutzung privater USB-Sticks an
+            Firmenrechnern ist ausnahmslos untersagt, um das Einschleusen von Malware, Ransomware oder Trojanern zu
+            verhindern. Externe Festplatten dürfen nur verwendet werden, wenn sie von der IT-Abteilung per BitLocker
+            hardwareseitig verschlüsselt wurden. Das Anschließen von privaten Smartphones zum reinen Aufladen über USB
+            ist am Firmen-Laptop gestattet, der Datentransfer jedoch softwareseitig blockiert.</p>
+
+        <h2>4 Incident Response: Meldepflicht bei Sicherheitsvorfällen und Verlust</h2>
+        <p>Jeder Verdacht auf eine Kompromittierung ist ernst zu nehmen. Verdächtige E-Mails (Phishing-Versuche) sind
+            nicht weiterzuleiten, sondern umgehend über den "Phish-Report-Button" in Microsoft Outlook an das Security
+            Operations Center (SOC) zu melden. Bei Diebstahl, Liegenlassen oder physischem Verlust eines Firmen-Laptops,
+            Tablets oder Diensthandys muss die IT-Hotline (+43 512 000-999) zwingend innerhalb von 2 Stunden nach
+            Feststellung des Verlusts telefonisch informiert werden. Nur durch diese schnelle Meldung kann eine
+            sofortige Fernlöschung (Remote-Wipe) aller lokalen Daten eingeleitet und der Netzwerkzugang gesperrt werden.
+            Eine Meldung per E-Mail ist bei Hardware-Verlust nicht ausreichend.</p>
+
+        <div class="pdf-image-placeholder" style="border: none; background: transparent;">
+            <img src="img/Incident Response.png" id="img-incident-response"
+                alt="Prozessablauf: Meldung von Sicherheitsvorfällen" style="display: block; width: 100%;">
+        </div>
+
+        <div class="pdf-footer">Seite 2 von 2</div>
+    </div>
+
+</body>
+
+</html>
