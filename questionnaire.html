@@ -599,6 +599,42 @@
                 </div>
             </form>
         </div>
+        
+        <div id="debriefing-section" style="display: none; max-width: 800px; margin: 0 auto;">
+            <header style="margin-bottom: 2rem; display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; border-bottom: none; padding: 0;">
+                <h1 style="background: linear-gradient(to right, var(--primary-color), #7c3aed); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-size: 2rem; font-weight: 800; letter-spacing: -0.025em; margin: 0;">Studienaufklärung (Debriefing)</h1>
+                <p style="color: #4b5563; font-size: 1.1rem; font-weight: 500;">Vielen Dank für deine Teilnahme. Bevor wir die Studie abschließen, möchten wir dich über den wahren Hintergrund informieren.</p>
+            </header>
+            
+            <div class="debriefing-content" style="line-height: 1.6; color: #374151; font-size: 1rem;">
+                <p style="margin-bottom: 1.25rem;">
+                    In dieser Studie wurde untersucht, wie unterschiedliche Benutzeroberflächen die Überprüfung von KI-generierten Informationen beeinflussen. 
+                    Dazu wurden in einigen Aufgaben gezielt <strong>falsche Informationen (Halluzinationen)</strong> in die Antworten der KI eingebaut.
+                </p>
+                <p style="margin-bottom: 1.25rem;">
+                    Ziel war es zu messen, wie effektiv und intuitiv die verschiedenen Interfaces (z.B. die Side-by-side-Ansicht im Vergleich zur klassischen Link-Liste) 
+                    dabei helfen, solche Fehler mithilfe der bereitgestellten Quelldokumente zu identifizieren.
+                </p>
+                <div style="background: #f8fafc; border-left: 4px solid var(--primary-color); padding: 1rem; margin-bottom: 1.5rem; font-style: italic;">
+                    <p><strong>Wichtiger Hinweis:</strong> Sämtliche Antworten des Chatbots waren vorab festgeschrieben und folgten einem festen Skript. Deine eingegebenen Fragen (Prompts) hatten daher keinen Einfluss auf den Inhalt oder die Korrektheit der Antworten – dies diente der wissenschaftlichen Vergleichbarkeit der Ergebnisse.</p>
+                </div>
+                <p style="margin-bottom: 2rem; font-weight: 600; color: #1f2937;">
+                    Da du nun über die bewusste Täuschung durch fehlerhafte KI-Antworten informiert bist, hast du die Wahl, ob deine Daten weiterhin für die wissenschaftliche Auswertung verwendet werden dürfen:
+                </p>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem;">
+                <button id="debriefing-confirm-btn" type="button" style="background: linear-gradient(to right, #10b981, #059669); color: white; padding: 1.25rem; border-radius: 0.75rem; font-weight: 700; font-size: 1.1rem; border: none; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.4);">
+                    Einverstanden (Daten für die Studie verwenden)
+                </button>
+                <div style="background: #fff5f5; border: 1.5px solid #feb2b2; padding: 1.25rem; border-radius: 0.75rem; margin-top: 1rem;">
+                    <p style="color: #c53030; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.75rem; text-align: center;">Möchtest du deine Daten doch nicht freigeben?</p>
+                    <button id="debriefing-withdraw-btn" type="button" class="opt-out-button" style="width: 100%; padding: 0.75rem; border-radius: 0.5rem; border: 1.5px solid #fc8181; font-weight: 700; background: white; color: #c53030; cursor: pointer; transition: all 0.2s;">
+                        Einwilligung widerrufen (Daten nicht verwenden)
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <div id="thank-you-message">
             <div class="success-icon">✓</div>
@@ -729,7 +765,29 @@
 
                 if (success) {
                     formWrapper.style.display = 'none';
-                    thankYouMessage.style.display = 'block';
+                    const debriefingSection = document.getElementById('debriefing-section');
+                    debriefingSection.style.display = 'block';
+
+                    // Debriefing Button Logic
+                    const confirmBtn = document.getElementById('debriefing-confirm-btn');
+                    const withdrawBtn = document.getElementById('debriefing-withdraw-btn');
+
+                    confirmBtn.addEventListener('click', async () => {
+                        debriefingSection.style.display = 'none';
+                        thankYouMessage.style.display = 'block';
+                        if (typeof trackEvent === 'function') {
+                            await trackEvent('debriefing_consent_confirmed', 'confirm-btn');
+                        }
+                    });
+
+                    withdrawBtn.addEventListener('click', async () => {
+                        if (confirm("Möchtest du deine Einwilligung wirklich widerrufen? Deine bisherigen Antworten werden dann nicht für die Auswertung dieser Studie herangezogen.")) {
+                            if (typeof trackEvent === 'function') {
+                                await trackEvent('debriefing_consent_withdrawn', 'withdraw-btn');
+                            }
+                            window.location.href = 'opt-out.html';
+                        }
+                    });
                 }
             });
         });
