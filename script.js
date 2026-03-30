@@ -201,27 +201,25 @@ async function logChatPrompt(promptText) {
  * UTILITY: LOG TASK ANSWER
  * Logs the specific final answer choice selected for a task.
  */
-async function logTaskAnswer(selectedValue, optionalComment = '') {
+async function logTaskAnswer(selectedValue) {
     if (!supabaseClient) return;
 
     let isCorrect = false;
-    if (selectedValue !== '3') {
-        const s = appStep;
-        const p = currentPhase;
-        // Mapping of logic (Task -> Step & Phase):
-        // Task 1: (HR: Fitness) -> correct is 40 ('1')
-        if (s === 1 && p === 1 && selectedValue === '1') isCorrect = true;
-        // Task 2: (HR: Kernzeit) -> KI hallucinates 09:00, correct is 10:00 ('2')
-        if (s === 1 && p === 2 && selectedValue === '2') isCorrect = true;
-        // Task 3: (IT: Passwort) -> KI hallucinates 60, correct is 90 ('2')
-        if (s === 2 && p === 1 && selectedValue === '2') isCorrect = true;
-        // Task 4: (IT: Laptop) -> correct is 2h ('1')
-        if (s === 2 && p === 2 && selectedValue === '1') isCorrect = true;
-        // Task 5: (Travel: Hotel) -> correct is 120 ('1')
-        if (s === 3 && p === 1 && selectedValue === '1') isCorrect = true;
-        // Task 6: (Travel: Taxi) -> KI hallucinates 20, correct is 22 ('2')
-        if (s === 3 && p === 2 && selectedValue === '2') isCorrect = true;
-    }
+    const s = appStep;
+    const p = currentPhase;
+    // Mapping of logic (Task -> Step & Phase):
+    // Task 1: (HR: Fitness) -> correct is 40 ('1')
+    if (s === 1 && p === 1 && selectedValue === '1') isCorrect = true;
+    // Task 2: (HR: Kernzeit) -> KI hallucinates 09:00, correct is 10:00 ('2')
+    if (s === 1 && p === 2 && selectedValue === '2') isCorrect = true;
+    // Task 3: (IT: Passwort) -> KI hallucinates 60, correct is 90 ('2')
+    if (s === 2 && p === 1 && selectedValue === '2') isCorrect = true;
+    // Task 4: (IT: Laptop) -> correct is 2h ('1')
+    if (s === 2 && p === 2 && selectedValue === '1') isCorrect = true;
+    // Task 5: (Travel: Hotel) -> correct is 120 ('1')
+    if (s === 3 && p === 1 && selectedValue === '1') isCorrect = true;
+    // Task 6: (Travel: Taxi) -> KI hallucinates 20, correct is 22 ('2')
+    if (s === 3 && p === 2 && selectedValue === '2') isCorrect = true;
 
     const computedTaskNumber = ((appStep - 1) * 2 + currentPhase);
     const computedPhaseNumber = appStep;
@@ -233,8 +231,7 @@ async function logTaskAnswer(selectedValue, optionalComment = '') {
         task_number: computedTaskNumber,
         phase_number: computedPhaseNumber,
         selected_value: selectedValue,
-        is_correct: isCorrect,
-        optional_comment: optionalComment
+        is_correct: isCorrect
     };
 
     console.log("Logging task answer:", data);
@@ -324,16 +321,8 @@ function renderTaskCard(phase) {
                     <input type="radio" name="accuracy-${phase}" value="2" disabled>
                     <span class="option-label">${phaseData.options["2"]}</span>
                 </label>
-                <label class="option-box disabled" style="font-size: 0.9rem;">
-                    <input type="radio" name="accuracy-${phase}" value="3" disabled>
-                    <span class="option-label">Ich kann diese Frage nicht beantworten</span>
-                </label>
             </div>
 
-            <div id="why-textbox-container" style="display: none; margin-bottom: 1rem;">
-                <label for="why-textarea" style="font-size: 0.85rem; color: var(--text-main); font-weight: 600;">Warum? (Optional)</label>
-                <textarea id="why-textarea" placeholder="Bitte erläutere deine Antwort..." style="width: 100%; padding: 0.5rem; border: 2px solid var(--border-color); border-radius: 0.5rem; margin-top: 0.25rem; resize: vertical; min-height: 60px; font-family: inherit; font-size: 0.85rem;"></textarea>
-            </div>
 
             <button class="card-next-button" id="card-next-btn" disabled>
                 ${phase === 1 ? 'Nächstes Ticket öffnen' : 'Nächste Aufgabe (Dokument wechseln)'}
@@ -354,15 +343,6 @@ function renderTaskCard(phase) {
     radios.forEach(radio => {
         radio.addEventListener('change', () => {
             optionSelectedInPhase = true;
-
-            const whyContainer = document.getElementById('why-textbox-container');
-            if (whyContainer) {
-                if (radio.value === '3') {
-                    whyContainer.style.display = 'block';
-                } else {
-                    whyContainer.style.display = 'none';
-                }
-            }
 
             trackEvent('option_selected', radio.value);
             checkPhaseCompletion();
@@ -395,13 +375,6 @@ function handleCardNext() {
     const selectedRadio = document.querySelector(`input[name="accuracy-${currentPhase}"]:checked`);
     const selectedValue = selectedRadio ? selectedRadio.value : 'none';
 
-    // Check if the user filled out the optional "why" textbox
-    const whyContainer = document.getElementById('why-textbox-container');
-    const whyTextarea = document.getElementById('why-textarea');
-    let whyReason = '';
-    if (whyContainer && whyContainer.style.display !== 'none' && whyTextarea) {
-        whyReason = whyTextarea.value.trim();
-    }
 
     // Log the aggregated hover duration to interaction_logs BEFORE moving to the next phase
     if (cumulativeHoverTimeOnTarget > 0) {
@@ -411,7 +384,7 @@ function handleCardNext() {
     }
 
     // Log the answer to the task answers table
-    logTaskAnswer(selectedValue, whyReason);
+    logTaskAnswer(selectedValue);
 
     if (currentPhase === 1) {
         // Move to phase 2: reset state and re-render card
