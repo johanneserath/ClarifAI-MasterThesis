@@ -104,6 +104,12 @@
             }
         });
 
+        window.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                window.parent.postMessage({ type: 'search_attempt' }, '*');
+            }
+        });
+
         window.addEventListener('DOMContentLoaded', () => {
             // Highlight specific text if deep-linked
             if (window.location.hash && window.location.hash.startsWith('#highlight-task-')) {
