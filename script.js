@@ -646,7 +646,7 @@ if (nextTaskBtn) {
  * OPT-OUT HANDLER
  */
 async function handleOptOut() {
-    const confirmed = confirm("Möchtest du die Studie wirklich beenden? Deine Teilnahme ist freiwillig und du kannst jederzeit aufhören. Wenn du fortfährst, wird deine aktuelle Sitzung beendet.");
+    const confirmed = confirm("Möchtest du die Studie wirklich abbrechen? Deine Teilnahme ist freiwillig und du kannst jederzeit aufhören. Wenn du fortfährst, wird deine aktuelle Sitzung beendet.");
 
     if (confirmed) {
         console.log("User confirmed opt-out. Logging event...");
