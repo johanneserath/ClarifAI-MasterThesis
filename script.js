@@ -595,6 +595,23 @@ function handleNextTask() {
 }
 
 /**
+ * SEARCH ATTEMPT LOGGING (Ctrl+F)
+ */
+window.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+        console.log("Search attempt detected (Main Window)");
+        trackEvent('search_attempt', 'ctrl-f');
+    }
+});
+
+window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'search_attempt') {
+        console.log("Search attempt detected (Iframe)");
+        trackEvent('search_attempt', 'ctrl-f');
+    }
+});
+
+/**
  * EVENT LISTENERS
  */
 if (sendBtn) {
