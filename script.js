@@ -521,8 +521,9 @@ function streamMessage(text, onComplete) {
                 const citation = document.createElement('a');
 
                 let linkUrl = currentDocUrl;
-                if (TASKS[appStep] && TASKS[appStep].phases[currentPhase] && TASKS[appStep].phases[currentPhase].highlightUrl) {
-                    linkUrl = TASKS[appStep].phases[currentPhase].highlightUrl;
+                const activeTaskId = getActualTaskId();
+                if (TASKS[activeTaskId] && TASKS[activeTaskId].phases[currentPhase] && TASKS[activeTaskId].phases[currentPhase].highlightUrl) {
+                    linkUrl = TASKS[activeTaskId].phases[currentPhase].highlightUrl;
                 }
 
                 citation.href = linkUrl;

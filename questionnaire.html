@@ -328,7 +328,8 @@
                     </div>
 
                     <div class="form-group full-width">
-                        <label>Um sicherzustellen, dass Sie diese Umfrage aufmerksam lesen, wählen Sie bei dieser Frage bitte die '6' aus.</label>
+                        <label>Um sicherzustellen, dass Sie diese Umfrage aufmerksam lesen, wählen Sie bei dieser Frage
+                            bitte die '6' aus.</label>
                         <div class="likert-scale">
                             <span class="likert-labels">[1]<br>nicht anstrengend</span>
                             <div class="likert-options">
@@ -344,14 +345,18 @@
                     </div>
 
                     <div class="form-group full-width">
-                        <label>Haben Sie die Originalquellen während der Aufgaben verwendet, um die Antworten zu überprüfen?</label>
+                        <label>Haben Sie die Originalquellen während der Aufgaben verwendet, um die Antworten zu
+                            überprüfen?</label>
                         <div class="radio-row">
-                            <label class="radio-option"><input type="radio" name="sources_used" value="1" required onchange="toggleSourceQuestions('1')"> Ja</label>
-                            <label class="radio-option"><input type="radio" name="sources_used" value="0" onchange="toggleSourceQuestions('0')"> Nein</label>
+                            <label class="radio-option"><input type="radio" name="sources_used" value="1" required
+                                    onchange="toggleSourceQuestions('1')"> Ja</label>
+                            <label class="radio-option"><input type="radio" name="sources_used" value="0"
+                                    onchange="toggleSourceQuestions('0')"> Nein</label>
                         </div>
                     </div>
 
-                    <div class="form-group full-width" id="source_access_container" style="display: none; margin-top: 1rem;">
+                    <div class="form-group full-width" id="source_access_container"
+                        style="display: none; margin-top: 1rem;">
                         <label>Wie einfach oder schwer fanden Sie den Zugriff auf die Originalquellen?</label>
                         <div class="likert-scale">
                             <span class="likert-labels">[1]<br>sehr schwer</span>
@@ -368,7 +373,8 @@
                     </div>
 
 
-                    <div class="form-group full-width" id="no_verification_container" style="display: none; margin-top: 1rem;">
+                    <div class="form-group full-width" id="no_verification_container"
+                        style="display: none; margin-top: 1rem;">
                         <label for="no_verification_reason">Wenn Sie die Quellen während der Aufgaben nicht oder nur
                             selten überprüft haben, was war der Hauptgrund dafür?</label>
                         <select id="no_verification_reason" name="no_verification_reason">
@@ -425,8 +431,8 @@
                                     required onchange="toggleHallucinationDetails(true)"> Ja</label>
                             <label class="radio-option"><input type="radio" name="hallucination_noticed" value="0"
                                     onchange="toggleHallucinationDetails(false)"> Nein</label>
-                            <label class="radio-option"><input type="radio" name="hallucination_noticed"
-                                    value="2" onchange="toggleHallucinationDetails(false)"> Bin mir nicht sicher</label>
+                            <label class="radio-option"><input type="radio" name="hallucination_noticed" value="2"
+                                    onchange="toggleHallucinationDetails(false)"> Bin mir nicht sicher</label>
                         </div>
                     </div>
 
@@ -442,21 +448,21 @@
                         function toggleSourceQuestions(usedSources) {
                             const accessContainer = document.getElementById('source_access_container');
                             const accessInputs = accessContainer.querySelectorAll('input[type="radio"]');
-                            
+
                             const reasonContainer = document.getElementById('no_verification_container');
                             const reasonSelect = document.getElementById('no_verification_reason');
-                            
+
                             if (usedSources === '1') {
                                 accessContainer.style.display = 'block';
                                 accessInputs.forEach(input => input.required = true);
-                                
+
                                 reasonContainer.style.display = 'none';
                                 reasonSelect.required = false;
                                 reasonSelect.value = '';
                             } else if (usedSources === '0') {
                                 accessContainer.style.display = 'none';
                                 accessInputs.forEach(input => { input.required = false; input.checked = false; });
-                                
+
                                 reasonContainer.style.display = 'block';
                                 reasonSelect.required = true;
                             }
@@ -503,58 +509,66 @@
                 style="margin-bottom: 2rem; display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; border-bottom: none; padding: 0;">
                 <h1
                     style="background: linear-gradient(to right, var(--primary-color), #7c3aed); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-size: 2.25rem; font-weight: 800; letter-spacing: -0.025em; margin: 0;">
-                    Studienaufklärung (Debriefing)</h1>
+                    Aufklärung und Hintergrund der Studie (Debriefing)</h1>
                 <p style="color: #4b5563; font-size: 1.125rem; font-weight: 500;">Vielen Dank für Ihre
-                    Teilnahme! Bevor wir die Studie abschließen, möchten wir Sie über den wissenschaftlichen
-                    Hintergrund informieren.</p>
+                    Teilnahme an dieser Studie! Wir möchten Sie nun über den genauen Hintergrund und das Ziel unseres
+                    Experiments aufklären.</p>
             </header>
 
             <div class="debriefing-content" style="line-height: 1.7; color: #374151; font-size: 1.05rem;">
                 <p style="margin-bottom: 1.5rem;">
-                    In diesem Experiment wurde untersucht, wie unterschiedliche Benutzeroberflächen die
-                    menschliche Fähigkeit zur Überprüfung von <strong>KI-generierten Informationen
-                        (Halluzinationen)</strong> beeinflussen.
-                    Dazu wurden in einigen Aufgaben gezielt falsche Informationen in die Antworten des Chatbots
-                    eingebaut.
-                </p>
-
-                <p style="margin-bottom: 1.5rem;">
-                    Ein besonderer Fokus der Untersuchung lag auf dem Aspekt des
-                    <strong>Vertrauensaufbaus</strong>: Wir haben getestet, ob ein anfänglich hohes Vertrauen
-                    (durch korrekte Antworten zu Beginn der Interaktion) Ihre spätere Wachsamkeit gegenüber
-                    Fehlern in anderen Aufgaben verändert.
+                    In diesem Experiment haben wir untersucht, wie unterschiedliche Benutzeroberflächen die
+                    menschliche Fähigkeit zur Überprüfung von <strong>KI-generierten Informationen</strong>
+                    beeinflussen. Dazu wurden drei verschiedene Interface-Designs erstellt, von denen Ihnen eines
+                    zufällig zugewiesen wurde.
                 </p>
 
                 <div
                     style="background: #fdf2f2; border-left: 4px solid #ef4444; padding: 1.25rem; margin-bottom: 2rem; border-radius: 0 0.75rem 0.75rem 0;">
-                    <p style="color: #991b1b; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem;">
-                        Wichtiger Hinweis zur Methodik:</p>
-                    <p style="color: #7f1d1d; font-size: 0.95rem; line-height: 1.5; font-style: italic;">
-                        Sämtliche Antworten des Chatbots waren vorab festgeschrieben und folgten einem strengen
-                        Skript. Ihre eingegebenen Fragen hatten daher keinen Einfluss auf die Korrektheit der
-                        Antworten – dies diente der wissenschaftlichen Vergleichbarkeit der Ergebnisse für alle
-                        Teilnehmer.</p>
+                    <p style="color: #991b1b; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem;">
+                        Wichtiger Hinweis zur Methodik (Bitte lesen):</p>
+                    <p style="color: #7f1d1d; font-size: 0.95rem; line-height: 1.6; margin-bottom: 0.75rem;">
+                        Um natürliches Verhalten zu untersuchen, haben wir nicht von Anfang an alle Details verraten.
+                        Sämtliche Antworten des Chatbots waren vorab festgeschrieben und folgten einem strengen Skript.
+                        Ihre eingegebenen Fragen hatten daher keinen Einfluss auf die Korrektheit der Antworten. Dies
+                        diente der wissenschaftlichen Vergleichbarkeit der Ergebnisse für alle Teilnehmer.</p>
+                    <p style="color: #7f1d1d; font-size: 0.95rem; line-height: 1.6;">
+                        Zudem enthielten die Antworten des Chatbots ab einem bestimmten Punkt absichtlich eingebaute
+                        inhaltliche Fehler (sog. <strong>KI-Halluzinationen</strong>). Bitte verwenden Sie die im
+                        Chatbot generierten Fakten daher <strong>nicht</strong> als verlässliche Quelle für Ihr Studium
+                        oder andere Zwecke.</p>
                 </div>
 
-                <p
-                    style="margin-bottom: 2rem; font-weight: 700; color: #111827; font-size: 1.1rem; text-align: center;">
-                    Möchten Sie Ihre Daten unter Berücksichtigung dieser Informationen für die Studie
-                    freigeben?
+                <p style="margin-bottom: 1.5rem; color: #374151;">
+                    Ihre gesammelten Daten (Klicks, Scroll-Verhalten und Fragebogenantworten) werden vollständig
+                    <strong>anonymisiert</strong> ausgewertet und lassen keine Rückschlüsse auf Ihre Person zu. Bei
+                    Fragen zur Studie können Sie sich jederzeit an
+                    <a href="mailto:j.erath@mci4me.at
+                        style=" color: var(--primary-color); font-weight: 600;">j.erath@mci4me.at</a>
+                    wenden.
+                </p>
+
+                <p style="margin-bottom: 0.5rem; font-weight: 700; color: #111827; font-size: 1.1rem;">
+                    Datenfreigabe:
+                </p>
+                <p style="margin-bottom: 2rem; color: #374151;">
+                    Möchten Sie Ihre Daten unter Berücksichtigung dieser Informationen für unsere wissenschaftliche
+                    Analyse freigeben?
                 </p>
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 1.25rem; margin-top: 2rem;">
                 <button id="debriefing-confirm-btn" type="button"
-                    style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 1.5rem; border-radius: 1rem; font-weight: 800; font-size: 1.2rem; border: none; cursor: pointer; transition: all 0.3s; box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3); text-transform: uppercase; letter-spacing: 0.025em;">
-                    Einverstanden (Daten verwenden)
+                    style="background: linear-gradient(135deg, #59bb9a 0%, #059669 100%); color: white; padding: 1.25rem 1.5rem; border-radius: 1rem; font-weight: 700; font-size: 1rem; border: none; cursor: pointer; transition: all 0.3s; box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3); display: flex; align-items: center; gap: 0.75rem; text-align: left;">
+                    <span style="font-size: 1.4rem; flex-shrink: 0;"></span> Ja, ich stimme der anonymen Verarbeitung
+                    meiner Daten zu.
                 </button>
 
-                <div style="text-align: center;">
-                    <button id="debriefing-withdraw-btn" type="button"
-                        style="background: transparent; color: #ef4444; font-weight: 600; font-size: 0.95rem; border: 2px solid transparent; text-decoration: underline; cursor: pointer; transition: all 0.2s; padding: 0.5rem;">
-                        Einwilligung widerrufen (Daten löschen)
-                    </button>
-                </div>
+                <button id="debriefing-withdraw-btn" type="button"
+                    style="background: white; color: #f07575; font-weight: 700; font-size: 1rem; border: 2px solid #fca5a5; border-radius: 1rem; cursor: pointer; transition: all 0.2s; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 0.75rem; text-align: left;">
+                    <span style="font-size: 1.4rem; flex-shrink: 0;"></span> Nein, ich möchte meine Daten zurückziehen
+                    (diese werden dann umgehend gelöscht).
+                </button>
             </div>
         </div><!-- END #debriefing-section -->
 
@@ -585,7 +599,7 @@
             // Deutsche Validierungs-Hinweise
             const requiredElements = form.querySelectorAll('[required]');
             requiredElements.forEach(el => {
-                el.addEventListener('invalid', function(e) {
+                el.addEventListener('invalid', function (e) {
                     if (this.validity.valueMissing) {
                         if (this.tagName.toLowerCase() === 'select') {
                             this.setCustomValidity('Bitte wählen Sie einen Eintrag aus der Liste.');
@@ -596,15 +610,15 @@
                         }
                     }
                 });
-                
+
                 // Fehler zurücksetzen, sobald der Nutzer etwas eingibt/auswählt
-                el.addEventListener('input', function() {
+                el.addEventListener('input', function () {
                     this.setCustomValidity('');
                 });
-                el.addEventListener('change', function() {
+                el.addEventListener('change', function () {
                     this.setCustomValidity('');
                 });
-            });            form.addEventListener('submit', async (e) => {
+            }); form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 submitBtn.disabled = true;
                 submitBtn.textContent = 'Wird übermittelt...';
