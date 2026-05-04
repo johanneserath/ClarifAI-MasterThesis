@@ -133,6 +133,20 @@ function getActualTaskId() {
     return appStep;
 }
 
+/**
+ * UTILITY: IS HALLUCINATION TASK
+ * Single source of truth for whether the current appStep/phase combination
+ * is one of the three planted-error tasks. Used for both AI answer selection
+ * and for stamping the is_hallucinated flag on every tracked event.
+ * Pattern: r-r-f-r-f-f  (Task 3, 5, 6 are hallucinated)
+ */
+function isHallucinationTask(step, phase) {
+    if (step === 2 && phase === 1) return true; // Task 3
+    if (step === 3 && phase === 1) return true; // Task 5
+    if (step === 3 && phase === 2) return true; // Task 6
+    return false;
+}
+
 const chatWindow = document.getElementById('chat-window');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-button');
@@ -180,7 +194,9 @@ async function trackEvent(eventType, elementId = null) {
         phase_number: computedPhaseNumber,
         interface_type: INTERFACE_TYPE,
         event_type: eventType,
-        element_id: elementId
+        element_id: elementId,
+        is_hallucinated: isQuestionnaire ? false : isHallucinationTask(appStep, currentPhase),
+        client_timestamp_ms: Date.now()
     };
 
     console.log("Tracking event:", event);
@@ -214,7 +230,8 @@ async function logChatPrompt(promptText) {
         prompt_text: promptText,
         interface_type: INTERFACE_TYPE,
         task_number: computedTaskNumber,
-        phase_number: computedPhaseNumber
+        phase_number: computedPhaseNumber,
+        client_timestamp_ms: Date.now()
     };
 
     console.log("Logging chat prompt:", data);
@@ -265,7 +282,9 @@ async function logTaskAnswer(selectedValue) {
         task_number: computedTaskNumber,
         phase_number: computedPhaseNumber,
         selected_value: selectedValue,
-        is_correct: isCorrect
+        is_correct: isCorrect,
+        is_hallucinated: isHallucinationTask(appStep, currentPhase),
+        client_timestamp_ms: Date.now()
     };
 
     console.log("Logging task answer:", data);
@@ -587,14 +606,8 @@ function handleSend() {
         if (TASKS[activeTaskId] && TASKS[activeTaskId].phases[currentPhase]) {
             const phaseInfo = TASKS[activeTaskId].phases[currentPhase];
 
-            // Hallucinations occur at:
-            // - Task 3 (appStep 2, Phase 1)
-            // - Task 5 (appStep 3, Phase 1)
-            // - Task 6 (appStep 3, Phase 2)
-            let shouldHallucinate = false;
-            if (appStep === 2 && currentPhase === 1) shouldHallucinate = true;
-            if (appStep === 3 && currentPhase === 1) shouldHallucinate = true;
-            if (appStep === 3 && currentPhase === 2) shouldHallucinate = true;
+            // Hallucinations occur at Task 3, 5, 6 — use shared helper for consistency
+            const shouldHallucinate = isHallucinationTask(appStep, currentPhase);
 
             if (shouldHallucinate) {
                 aiAnswer = phaseInfo.aiAnswerHallucinated;
@@ -605,6 +618,9 @@ function handleSend() {
 
         // Post the AI answer word-by-word (streaming effect)
         streamMessage(aiAnswer, () => {
+            // Fire anchor event so analysis can compute pre/post-verification timing
+            trackEvent('ai_answer_completed', 'chat-window');
+
             // Enable option boxes after streaming completes
             const taskContainer = document.getElementById('task-description-container');
             if (taskContainer) {
