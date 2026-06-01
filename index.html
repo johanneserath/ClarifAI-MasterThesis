@@ -125,9 +125,12 @@
         beginBtn.addEventListener('click', () => {
             if (!beginBtn.disabled) {
                 // Map interface filename to a selection
-                const interfaces = ['InterfaceA.html', 'interfaceB.html', 'interfaceC.html'];
-                const selectedInterface = interfaces[Math.floor(Math.random() * interfaces.length)];
-                
+                // TEMPORARY: Fixed to Interface A to boost numbers.
+                // Restore the two lines below for random assignment.
+                const selectedInterface = 'InterfaceA.html';
+                // const interfaces = ['InterfaceA.html', 'interfaceB.html', 'interfaceC.html'];
+                // const selectedInterface = interfaces[Math.floor(Math.random() * interfaces.length)];
+
                 // Randomly select a sequence for the Latin Square design (1, 2, or 3)
                 const taskSequence = Math.floor(Math.random() * 3) + 1;
 
